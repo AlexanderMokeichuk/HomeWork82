@@ -10,3 +10,9 @@ export interface AlbumFront {
   createdAt: string,
   image: string | null,
 }
+
+export interface TrackFront {
+  name: string,
+  album: string,
+  duration: string,
+}

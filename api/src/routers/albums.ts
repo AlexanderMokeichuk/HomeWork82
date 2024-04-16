@@ -35,10 +35,13 @@ albumsRouter.post("/", imagesUpload.single("image"), async (req, res, next) => {
 });
 
 albumsRouter.get("/", async (req, res, next) => {
-  const query = req.query.artist;
+  const query = req.query.artist as string;
   try {
     if (query) {
-      const singerAlbum = await Album.find({singer: query.toString()});
+      if (!mongoose.Types.ObjectId.isValid(query)) {
+        return res.status(422).send({ error: 'Not found singer!!' });
+      }
+      const singerAlbum = await Album.find({singer: query});
       return res.send(singerAlbum);
     }
 
