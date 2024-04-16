@@ -1,5 +1,4 @@
 import express from "express";
-import Album from "../models/Album";
 import {TrackFront} from "../type";
 import Track from "../models/Track";
 import mongoose from "mongoose";
@@ -27,9 +26,9 @@ tracksRouter.post("/", async (req, res, next) => {
 });
 
 tracksRouter.get('/', async (req, res, next) => {
-  try {
-    const query = req.query.album as string;
+  const query = req.query.album as string;
 
+  try {
     if (query) {
       if (!mongoose.Types.ObjectId.isValid(query)) {
         return res.status(422).send({ error: 'Not found album!!' });
@@ -44,5 +43,6 @@ tracksRouter.get('/', async (req, res, next) => {
     next(error);
   }
 });
+
 
 export default tracksRouter;

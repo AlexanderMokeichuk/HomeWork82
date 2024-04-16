@@ -1,5 +1,4 @@
-import {Schema, Types, model} from "mongoose";
-import Album from "./Album";
+import {model, Schema} from "mongoose";
 
 const TrackSchema = new Schema(
   {
@@ -12,10 +11,7 @@ const TrackSchema = new Schema(
       ref: "Album",
       required: true,
     },
-    duration: {
-      type: String,
-      required: true,
-    },
+    duration: String,
   },
   {
     versionKey: false,
