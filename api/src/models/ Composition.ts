@@ -16,6 +16,8 @@ const CompositionSchema = new Schema({
     type: String,
     required: true,
   },
+}, {
+  versionKey: false,
 });
 
 const Composition = mongoose.model("Composition", CompositionSchema);

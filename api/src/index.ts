@@ -3,6 +3,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import artistsRouter from "./routers/artists";
 import config from "./config";
+import albumsRouter from "./routers/albums";
 
 const app = express();
 
@@ -14,6 +15,8 @@ app.use(express.json());
 app.use(express.static("./src/public"));
 
 app.use("/artists", artistsRouter);
+app.use("/albums", albumsRouter);
+
 
 
 const run = async () => {

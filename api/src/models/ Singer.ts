@@ -6,7 +6,7 @@ const SingerSchema = new Schema({
     type: String,
     required: true,
   },
-  image: String,
+  image: String || null,
   description: String,
 },{
   versionKey: false,

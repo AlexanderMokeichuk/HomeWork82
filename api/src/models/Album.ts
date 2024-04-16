@@ -15,7 +15,9 @@ const AlbumSchema = new Schema({
     type: String,
     required: true,
   },
-  image: String,
+  image: String || null,
+},{
+  versionKey: false,
 });
 
 const Album  = mongoose.model('Album', AlbumSchema);
