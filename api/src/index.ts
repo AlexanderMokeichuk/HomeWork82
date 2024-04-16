@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import artistsRouter from "./routers/artists";
+import config from "./config";
 
 const app = express();
 
@@ -9,8 +11,14 @@ const localhost = `http://localhost:${port}`;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static("./src/public"));
+
+app.use("/artists", artistsRouter);
+
 
 const run = async () => {
+  await mongoose.connect(config.mongoose.db);
+
   app.listen(port, () => {
     console.log(`Server running at ${localhost}`);
   });
