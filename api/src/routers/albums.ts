@@ -1,6 +1,6 @@
 import express from "express";
 import {imagesUpload} from "../multer";
-import {AlbumApi, AlbumFront} from "../type";
+import {AlbumApi, AlbumArtistData, AlbumFront} from "../type";
 import Album from "../models/Album";
 import mongoose from "mongoose";
 
@@ -38,11 +38,11 @@ albumsRouter.get("/", async (req, res, next) => {
       if (!mongoose.Types.ObjectId.isValid(query)) {
         return res.status(422).send({ error: 'Not found artist!!' });
       }
-      const singerAlbum = await Album.find({artist: query});
-      return res.send(singerAlbum);
+      const albumsById: AlbumApi[] = await Album.find({artist: query});
+      return res.send(albumsById);
     }
 
-    const albums = await Album.find();
+    const albums: AlbumApi[] = await Album.find();
     return res.send(albums);
   } catch (e) {
     next(e);
@@ -57,12 +57,16 @@ albumsRouter.get('/:id', async (req, res, next) => {
   }
 
   try {
-    const album = await Album.findOne<AlbumApi>({_id: id}).populate(
+    const albumById = await Album.findOne<AlbumArtistData>({_id: id}).populate(
       'artist',
       'name description image'
     );
 
-    return res.send(album);
+    if (!albumById) {
+      return res.status(422).send({ error: 'Artist not found!' });
+    }
+
+    return res.send(albumById);
   } catch (e) {
     next(e);
   }

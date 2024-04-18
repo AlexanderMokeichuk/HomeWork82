@@ -1,5 +1,5 @@
 import express from "express";
-import {TrackFront} from "../type";
+import {TrackApi, TrackFront} from "../type";
 import Track from "../models/Track";
 import mongoose from "mongoose";
 
@@ -10,17 +10,20 @@ tracksRouter.post("/", async (req, res, next) => {
     return res.status(400).json({error: "Incorrect data"});
   }
   try {
-    const trackData: TrackFront = {
+    const trackPost: TrackFront = {
       name: req.body.name,
       album: req.body.album,
       duration: req.body.duration,
     };
 
-    const track = new Track(trackData);
+    const track = new Track(trackPost);
     await track.save();
 
     return res.send(track);
   } catch (e) {
+    if (e instanceof mongoose.Error.ValidationError) {
+      return res.status(422).send(e);
+    }
     next(e);
   }
 });
@@ -33,11 +36,11 @@ tracksRouter.get('/', async (req, res, next) => {
       if (!mongoose.Types.ObjectId.isValid(query)) {
         return res.status(422).send({ error: 'Not found album!!' });
       }
-      const tracks = await Track.find({album: query});
-      return res.send(tracks);
+      const albumTracks: TrackApi[] = await Track.find({album: query});
+      return res.send(albumTracks);
     }
 
-    const tracks = await Track.find();
+    const tracks: TrackApi[] = await Track.find();
     return res.send(tracks);
   } catch (error) {
     next(error);

@@ -12,7 +12,10 @@ const TrackSchema = new Schema<TrackFront>(
       ref: "Album",
       required: true,
     },
-    duration: String,
+    duration: {
+      type: String,
+      required: true,
+    },
   },
   {
     versionKey: false,

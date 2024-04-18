@@ -22,7 +22,15 @@ export interface TrackFront {
 export interface ArtistApi extends ArtistFront {
   _id: string
 }
+
 export interface AlbumApi extends AlbumFront {
   _id: string,
+}
+
+export interface TrackApi extends TrackFront {
+  _id: string,
+}
+
+export interface AlbumArtistData extends AlbumApi {
   artist: ArtistApi,
 }

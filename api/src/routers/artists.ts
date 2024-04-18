@@ -1,7 +1,7 @@
 import express from "express";
 import Artist from "../models/Artist";
 import {imagesUpload} from "../multer";
-import {ArtistFront} from "../type";
+import {ArtistApi, ArtistFront} from "../type";
 
 const artistsRouter = express.Router();
 
@@ -28,7 +28,7 @@ artistsRouter.post("/", imagesUpload.single("image"), async (req, res, next) => 
 
 artistsRouter.get("/", async (_req, res, next) => {
   try {
-    const artists = await Artist.find();
+    const artists: ArtistApi[] = await Artist.find();
     return res.send(artists);
   } catch (e) {
     next(e);
