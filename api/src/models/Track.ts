@@ -1,6 +1,7 @@
 import {model, Schema} from "mongoose";
+import {TrackFront} from "../type";
 
-const TrackSchema = new Schema(
+const TrackSchema = new Schema<TrackFront>(
   {
     name: {
       type: String,

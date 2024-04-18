@@ -1,7 +1,7 @@
 import express from "express";
-import Singer from "../models/ Singer";
+import Artist from "../models/Artist";
 import {imagesUpload} from "../multer";
-import {SingerFront} from "../type";
+import {ArtistFront} from "../type";
 
 const artistsRouter = express.Router();
 
@@ -11,19 +11,16 @@ artistsRouter.post("/", imagesUpload.single("image"), async (req, res, next) => 
   }
 
   try {
-    const postSinger: SingerFront = {
+    const postArtist: ArtistFront = {
       name: req.body.name,
       image: req.file ? req.file.filename : null,
       description: req.body.description,
     };
 
-    const singer = new Singer(postSinger);
-    await singer.save();
+    const artist = new Artist(postArtist);
+    await artist.save();
 
-    return res.send({
-      ...postSinger,
-      _id: singer._id
-    });
+    return res.send(artist);
   } catch (e) {
     next(e);
   }
@@ -31,8 +28,8 @@ artistsRouter.post("/", imagesUpload.single("image"), async (req, res, next) => 
 
 artistsRouter.get("/", async (_req, res, next) => {
   try {
-    const singer = await Singer.find();
-    return res.send(singer);
+    const artists = await Artist.find();
+    return res.send(artists);
   } catch (e) {
     next(e);
   }

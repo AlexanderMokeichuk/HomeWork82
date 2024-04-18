@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import {ArtistFront} from "../type";
 
 const Schema = mongoose.Schema;
-const SingerSchema = new Schema({
+const ArtistSchema = new Schema<ArtistFront>({
   name: {
     type: String,
     required: true,
@@ -12,6 +13,6 @@ const SingerSchema = new Schema({
   versionKey: false,
 });
 
-const Singer  = mongoose.model('Singer', SingerSchema);
+const Artist  = mongoose.model('Artist', ArtistSchema);
 
-export default Singer;
+export default Artist;

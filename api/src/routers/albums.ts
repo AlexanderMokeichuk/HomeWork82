@@ -1,20 +1,20 @@
 import express from "express";
 import {imagesUpload} from "../multer";
-import {AlbumFront} from "../type";
+import {AlbumApi, AlbumFront} from "../type";
 import Album from "../models/Album";
 import mongoose from "mongoose";
 
 const albumsRouter = express.Router();
 
 albumsRouter.post("/", imagesUpload.single("image"), async (req, res, next) => {
-  if (!req.body.name || !req.body.singer || !req.body.createdAt) {
+  if (!req.body.name || !req.body.artist || !req.body.createdAt) {
     return res.status(400).json({error: "Incorrect data"});
   }
 
   try {
     const postAlbum: AlbumFront = {
       name: req.body.name,
-      singer: req.body.singer,
+      artist: req.body.artist,
       createdAt: req.body.createdAt,
       image: req.file ? req.file.filename : null,
     };
@@ -22,10 +22,7 @@ albumsRouter.post("/", imagesUpload.single("image"), async (req, res, next) => {
     const album = new Album(postAlbum);
     await album.save();
 
-    return res.send({
-      ...postAlbum,
-      _id: album._id
-    });
+    return res.send(album);
   } catch (e) {
     if (e instanceof mongoose.Error.ValidationError) {
       return res.status(422).send(e);
@@ -39,9 +36,9 @@ albumsRouter.get("/", async (req, res, next) => {
   try {
     if (query) {
       if (!mongoose.Types.ObjectId.isValid(query)) {
-        return res.status(422).send({ error: 'Not found singer!!' });
+        return res.status(422).send({ error: 'Not found artist!!' });
       }
-      const singerAlbum = await Album.find({singer: query});
+      const singerAlbum = await Album.find({artist: query});
       return res.send(singerAlbum);
     }
 
@@ -53,16 +50,21 @@ albumsRouter.get("/", async (req, res, next) => {
 });
 
 albumsRouter.get('/:id', async (req, res, next) => {
+  const id = req.params.id as string;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(422).send({ error: 'Artist not found!' });
+  }
+
   try {
-    const id = req.params.id;
-    const albums = await Album.find({ _id: id }).populate(
-      'singer',
+    const album = await Album.findOne<AlbumApi>({_id: id}).populate(
+      'artist',
       'name description image'
     );
-    const album = albums[0];
+
     return res.send(album);
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    next(e);
   }
 });
 

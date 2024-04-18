@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
+import {AlbumFront} from "../type";
 
 const Schema = mongoose.Schema;
-const AlbumSchema = new Schema({
+const AlbumSchema = new Schema<AlbumFront>({
   name: {
     type: String,
     required: true,
   },
-  singer: {
+  artist: {
     type: Schema.Types.ObjectId,
-    ref: 'Singer',
+    ref: 'Artist',
     required: true,
   },
   createdAt: {
