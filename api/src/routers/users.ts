@@ -1,7 +1,6 @@
 import express from "express";
 import mongoose, {mongo} from "mongoose";
 import User from "../models/User";
-import bcrypt from "bcrypt";
 
 const usersRouter = express.Router();
 
@@ -12,6 +11,7 @@ usersRouter.post("/", async (req, res, next) => {
       password: req.body.password,
     });
 
+    user.generateToken();
     await user.save();
 
     return res.send(user);
@@ -45,7 +45,9 @@ usersRouter.post("/sessions", async (req, res, next) => {
        return res.status(400).send({error: "Username or password are not correct!!"});
      }
 
-     return res.send(isMatch);
+     user.generateToken();
+     user.save();
+     return res.send({message: "Username and password correct!", user});
    } catch (e) {
      next();
    }
