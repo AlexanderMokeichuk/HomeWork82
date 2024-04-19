@@ -6,9 +6,6 @@ import mongoose from "mongoose";
 const tracksRouter = express.Router();
 
 tracksRouter.post("/", async (req, res, next) => {
-  if (!req.body.name || !req.body.album || !req.body.duration) {
-    return res.status(400).json({error: "Incorrect data"});
-  }
   try {
     const trackPost: TrackFront = {
       name: req.body.name,

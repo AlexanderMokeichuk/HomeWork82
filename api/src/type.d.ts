@@ -1,4 +1,5 @@
 import Types = module;
+import {Model} from "mongoose";
 
 export interface ArtistFront {
   name: string,
@@ -19,6 +20,11 @@ export interface TrackFront {
   duration: string,
 }
 
+export interface UserFront {
+  username: string,
+  password: string,
+}
+
 export interface ArtistApi extends ArtistFront {
   _id: string
 }
@@ -31,6 +37,17 @@ export interface TrackApi extends TrackFront {
   _id: string,
 }
 
+export interface UserApi extends UserFront {
+  _id: string,
+  token: string,
+}
+
 export interface AlbumArtistData extends AlbumApi {
   artist: ArtistApi,
 }
+
+export interface UserMethods {
+  checkPassword(password: string): Promise<boolean>,
+}
+
+export type UserModel = Model<UserFront, [], UserMethods>;

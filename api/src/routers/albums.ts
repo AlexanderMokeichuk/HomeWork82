@@ -7,10 +7,6 @@ import mongoose from "mongoose";
 const albumsRouter = express.Router();
 
 albumsRouter.post("/", imagesUpload.single("image"), async (req, res, next) => {
-  if (!req.body.name || !req.body.artist || !req.body.createdAt) {
-    return res.status(400).json({error: "Incorrect data"});
-  }
-
   try {
     const postAlbum: AlbumFront = {
       name: req.body.name,

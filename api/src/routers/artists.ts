@@ -2,14 +2,11 @@ import express from "express";
 import Artist from "../models/Artist";
 import {imagesUpload} from "../multer";
 import {ArtistApi, ArtistFront} from "../type";
+import mongoose from "mongoose";
 
 const artistsRouter = express.Router();
 
 artistsRouter.post("/", imagesUpload.single("image"), async (req, res, next) => {
-  if (!req.body.name) {
-    return res.status(400).json({error: "Incorrect data"});
-  }
-
   try {
     const postArtist: ArtistFront = {
       name: req.body.name,
@@ -22,6 +19,9 @@ artistsRouter.post("/", imagesUpload.single("image"), async (req, res, next) => 
 
     return res.send(artist);
   } catch (e) {
+    if (e instanceof mongoose.Error.ValidationError) {
+      return res.status(422).send(e);
+    }
     next(e);
   }
 });
