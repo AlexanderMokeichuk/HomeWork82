@@ -13,7 +13,7 @@ const AlbumSchema = new Schema<AlbumFront>({
     required: true,
   },
   createdAt: {
-    type: String,
+    type: Number,
     required: true,
   },
   image: String || null,

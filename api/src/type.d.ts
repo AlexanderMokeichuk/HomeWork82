@@ -10,7 +10,7 @@ export interface ArtistFront {
 export interface AlbumFront {
   name: string,
   artist: Types.ObjectId,
-  createdAt: string,
+  createdAt: number,
   image: string | null,
 }
 
@@ -18,6 +18,7 @@ export interface TrackFront {
   name: string,
   album: Types.ObjectId,
   duration: string,
+  item: number,
 }
 
 export interface UserFront {
@@ -44,10 +45,6 @@ export interface TrackApi extends TrackFront {
   _id: string,
 }
 
-export interface UserApi extends UserFront {
-  _id: string,
-}
-
 export interface AlbumArtistData extends AlbumApi {
   artist: ArtistApi,
 }
@@ -57,4 +54,4 @@ export interface UserMethods {
   generateToken(): void,
 }
 
-export type UserModel = Model<UserFront, [], UserMethods>;
+export type UserModel = Model<UserFront, unknown, UserMethods>;

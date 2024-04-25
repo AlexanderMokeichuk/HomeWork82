@@ -1,4 +1,4 @@
-import {model, Schema} from "mongoose";
+import mongoose, {model, Schema} from "mongoose";
 import {TrackFront} from "../type";
 
 const TrackSchema = new Schema<TrackFront>(
@@ -16,11 +16,16 @@ const TrackSchema = new Schema<TrackFront>(
       type: String,
       required: true,
     },
+    item: {
+      type: Number,
+      required: true,
+    }
   },
   {
     versionKey: false,
   }
 );
+
 
 const Track = model("Track", TrackSchema);
 
