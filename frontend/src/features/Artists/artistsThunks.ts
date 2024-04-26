@@ -10,6 +10,7 @@ export const fetchArtists = createAsyncThunk<ArtistsApi[], undefined>(
       console.log(response);
       return response;
     } catch (e) {
+      console.log(e);
       return [];
     }
   },

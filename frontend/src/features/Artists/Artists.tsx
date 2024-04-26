@@ -1,13 +1,15 @@
 import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {selectArtists} from "./artistsSlice";
+import {selectArtists, selectLaudingArtists} from "./artistsSlice";
 import {fetchArtists} from "./artistsThunks";
 import {Grid} from "@mui/material";
 import ArtistCard from "./components/ArtistCard/ArtistCard";
+import Spinner from "../../Ul/components/Spinner/Spinner";
 
 const Artists: React.FC = () => {
   const dispatch = useAppDispatch();
   const artists = useAppSelector(selectArtists);
+  const lauding = useAppSelector(selectLaudingArtists);
 
   useEffect(() => {
     dispatch(fetchArtists());
@@ -15,10 +17,12 @@ const Artists: React.FC = () => {
 
   return (
     <Grid container display={"flex"} marginTop={20} alignItems={"center"} justifyContent={"center"} gap={2}>
-      {artists.map((item) => {
-        return <ArtistCard key={item._id} artist={item} />;
-      })}
-
+      {lauding
+        ? <Spinner />
+        : artists.map((item) => {
+          return <ArtistCard key={item._id} artist={item} />;
+        })
+      }
     </Grid>
   );
 };
