@@ -18,7 +18,8 @@ const TrackCard: React.FC<Props> = ({track, album}) => {
       margin: 0,
       width: 800,
     }}>
-      <Grid container display={"flex"} width={800} direction={"row"}>
+      <Grid container display={"flex"} width={800} direction={"row"} color={"white"}>
+        <span style={{marginLeft: 3}}>{track.item}</span>
         <Grid item display={"flex"} direction={"row"} gap={2}>
           <img
             width={50}
