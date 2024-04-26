@@ -18,8 +18,13 @@ const artistSlice = createSlice({
   initialState: InitialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchArtists.fulfilled, (state, {payload: artistsApi}: PayloadAction<ArtistsApi[]>) => {
+    builder.addCase(fetchArtists.pending, (state) => {
+      state.laudingArtists = true;
+    }).addCase(fetchArtists.fulfilled, (state, {payload: artistsApi}: PayloadAction<ArtistsApi[]>) => {
       state.artists = artistsApi;
+      state.laudingArtists = false;
+    }).addCase(fetchArtists.rejected, (state) => {
+      state.laudingArtists = false;
     });
   },
 });
