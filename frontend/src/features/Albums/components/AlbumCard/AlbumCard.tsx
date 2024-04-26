@@ -1,27 +1,21 @@
-import {Card, CardActions, CardContent, CardMedia, IconButton, styled} from "@mui/material";
+import {Card, CardActions, CardContent, IconButton} from "@mui/material";
 import React from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {AlbumApi} from "../../../../type";
 import {Link} from "react-router-dom";
-import {API_URL} from "../../../../constants";
+import {API_URL, IMAGE_CARD_MEDIA} from "../../../../constants";
 
 interface Props {
   album: AlbumApi,
 }
 
-const ImageCardMedia = styled(CardMedia)({
-  height: 0,
-  paddingTop: '56.25%',
-});
-
 const AlbumCard: React.FC<Props> = ({album}) => {
-  console.log(album.createdAt);
   return (
       <Card sx={{
-        height: 300,
+        height: 350,
         width: 300,
       }}>
-        <ImageCardMedia image={API_URL + '/' + album.image}/>
+        <IMAGE_CARD_MEDIA image={API_URL + '/' + album.image}/>
         <CardContent>
           <p>
             <strong>{album.name}</strong>
@@ -29,7 +23,7 @@ const AlbumCard: React.FC<Props> = ({album}) => {
           <strong>{album.createdAt}.г</strong>
         </CardContent>
         <CardActions>
-          <IconButton component={Link} to={`/products/`}>
+          <IconButton component={Link} to={`/tracks/${album._id}`}>
             <ArrowForwardIcon/>
           </IconButton>
         </CardActions>

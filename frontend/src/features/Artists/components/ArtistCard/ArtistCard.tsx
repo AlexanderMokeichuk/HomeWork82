@@ -1,17 +1,14 @@
-import {Card, CardActions, CardContent, CardMedia, Grid, IconButton, styled} from "@mui/material";
+import {Card, CardActions, CardContent, Grid, IconButton} from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import React from "react";
 import {Link} from "react-router-dom";
 import {ArtistsApi} from "../../../../type";
-import {API_URL} from "../../../../constants";
+import {API_URL, IMAGE_CARD_MEDIA} from "../../../../constants";
 
 interface Props {
   artist: ArtistsApi,
 }
-export const ImageCardMedia = styled(CardMedia)({
-  height: 0,
-  paddingTop: '56.25%',
-});
+
 
 const ArtistCard: React.FC<Props> = ({artist}) => {
   return (
@@ -20,7 +17,7 @@ const ArtistCard: React.FC<Props> = ({artist}) => {
         width: 250,
         bgcolor: '#ADD8E6',
       }}>
-        <ImageCardMedia image={API_URL + '/' + artist.image}/>
+        <IMAGE_CARD_MEDIA image={API_URL + '/' + artist.image}/>
         <CardContent>
           {artist.name}
         </CardContent>
