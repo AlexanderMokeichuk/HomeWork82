@@ -35,7 +35,7 @@ tracksRouter.get('/', async (req, res, next) => {
       if (!mongoose.Types.ObjectId.isValid(query)) {
         return res.status(422).send({ error: 'Not found album!!' });
       }
-      const albumTracks: TrackApi[] = await Track.find({album: query});
+      const albumTracks = await Track.find({album: query}).sort({item: 1});
       return res.send(albumTracks);
     }
 
