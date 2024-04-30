@@ -34,6 +34,7 @@ export interface UserApi extends UserFront {
 export interface TrackHistoryFront {
   user: Types.ObjectId,
   track: Types.ObjectId,
+  artist: Types.ObjectId,
   datetime: string,
 }
 

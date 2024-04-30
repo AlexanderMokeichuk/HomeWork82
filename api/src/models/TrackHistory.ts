@@ -4,12 +4,17 @@ import {TrackHistoryFront} from "../type";
 const TrackHistorySchema = new Schema<TrackHistoryFront>({
   user: {
     type: Schema.Types.ObjectId,
-    ref: "Artist",
+    ref: "User",
     required: true,
   },
   track: {
     type: Schema.Types.ObjectId,
     ref: "Track",
+    required: true,
+  },
+  artist: {
+    type: Schema.Types.ObjectId,
+    ref: 'Artist',
     required: true,
   },
   datetime: {

@@ -2,28 +2,20 @@ import express from "express";
 import User from "../models/User";
 import TrackHistory from "../models/TrackHistory";
 import mongoose from "mongoose";
+import auth, {RequestWithUser} from "../middleware/auth";
+import Album from "../models/Album";
+import {AlbumArtistData} from "../type";
 
 const trackHistoryRouter = express.Router();
 
-trackHistoryRouter.post("/", async (req, res, next) => {
-  const tokenData = req.get("Authorization");
-
-  if (!tokenData) {
-    return res.status(401).send({error: "No token provided!"});
-  }
-
-  const [_, token] = tokenData.split(" ");
+trackHistoryRouter.post("/", auth, async (req, res, next) => {
+  const user = (req as RequestWithUser).user!;
 
   try {
-    const user = await User.findOne({token});
-
-    if (!user) {
-      return res.status(401).send({error: "Unauthorized"});
-    }
-
     const trackHistory = new TrackHistory({
       user: user._id,
       track: req.body.track,
+      artist: req.body.artist,
       datetime: new Date().toISOString(),
     });
 
@@ -35,6 +27,21 @@ trackHistoryRouter.post("/", async (req, res, next) => {
       return res.status(422).send(e);
     }
 
+    next(e);
+  }
+});
+
+trackHistoryRouter.get("/", auth, async (req, res, next) => {
+  const user = (req as RequestWithUser).user!;
+  try {
+    const trackHistory = await TrackHistory
+      .find({user: user._id})
+      .sort({date: -1})
+      .populate({path: 'track', select: 'name'})
+      .populate({path: 'artist', select: 'name'});
+
+    return res.send(trackHistory);
+  } catch (e) {
     next(e);
   }
 });
