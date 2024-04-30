@@ -1,10 +1,7 @@
 import express from "express";
-import User from "../models/User";
 import TrackHistory from "../models/TrackHistory";
 import mongoose from "mongoose";
 import auth, {RequestWithUser} from "../middleware/auth";
-import Album from "../models/Album";
-import {AlbumArtistData} from "../type";
 
 const trackHistoryRouter = express.Router();
 

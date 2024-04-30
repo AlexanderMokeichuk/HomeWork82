@@ -50,7 +50,7 @@ const Tracks: React.FC = () => {
         }
       </Grid>
 
-      <Grid item xs mt={5} direction={"column"} bgcolor={"gray"} padding={2} borderRadius={2}>
+      <Grid container mt={5} direction={"column"} bgcolor={"gray"} padding={2} borderRadius={2}>
         {laudingTraks
           ? (
             <Grid container justifyContent={'center'}>

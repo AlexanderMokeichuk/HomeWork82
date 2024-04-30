@@ -23,6 +23,25 @@ export interface TrackApi {
   item: number,
 }
 
+export interface TracksHistory {
+  track: string,
+  token: string,
+  artist: string
+}
+
+export interface TracksHistoryApi {
+  _id: string,
+  user: string,
+  track: {
+    _id: string,
+    name: 'Не сначала'
+  },
+  artist: {
+    _id: string,
+    name: string,
+  }
+}
+
 export interface InfoAlbum extends AlbumApi<OutletProps, "createdAt", "artist">{
   _id: string,
   name: string,
