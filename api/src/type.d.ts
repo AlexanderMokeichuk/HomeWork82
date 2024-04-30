@@ -27,6 +27,10 @@ export interface UserFront {
   token: string,
 }
 
+export interface UserApi extends UserFront {
+  _id: Types.ObjectId;
+}
+
 export interface TrackHistoryFront {
   user: Types.ObjectId,
   track: Types.ObjectId,
