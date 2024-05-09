@@ -19,7 +19,11 @@ const TrackSchema = new Schema<TrackFront>(
     item: {
       type: Number,
       required: true,
-    }
+    },
+    isPublished: {
+      type: Boolean,
+      required: true,
+    },
   },
   {
     versionKey: false,

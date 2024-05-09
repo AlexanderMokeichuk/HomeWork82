@@ -20,6 +20,10 @@ const AlbumSchema = new Schema<AlbumFront>({
     type: String || null,
     required: true,
   },
+  isPublished: {
+    type: Boolean,
+    required: true,
+  },
 },{
   versionKey: false,
 });

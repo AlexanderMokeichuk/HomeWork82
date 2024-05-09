@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
 import mongoose, {HydratedDocument, Schema} from "mongoose";
-import {UserFront, UserMethods, UserModel} from "../type";
+import {User, UserMethods, UserModel} from "../type";
 import {randomUUID} from "crypto";
 
 const SALT_WORK_FACTOR = 10;
 
-const UserSchema = new Schema<UserFront, UserModel, UserMethods>({
+const UserSchema = new Schema<User, UserModel, UserMethods>({
   password: {
     type: String,
     required: true,
@@ -15,10 +15,10 @@ const UserSchema = new Schema<UserFront, UserModel, UserMethods>({
     required: true,
     unique: true,
     validate: {
-      validator: async function (this: HydratedDocument<UserFront>, username: string): Promise<boolean> {
+      validator: async function (this: HydratedDocument<User>, username: string): Promise<boolean> {
         if (!this.isModified('username')) return true;
 
-        const user: HydratedDocument<UserFront> | null = await User.findOne({username});
+        const user: HydratedDocument<User> | null = await User.findOne({username});
         const userBoolean = Boolean(user);
         return !userBoolean;
       },
@@ -26,6 +26,10 @@ const UserSchema = new Schema<UserFront, UserModel, UserMethods>({
     },
   },
   token: {
+    type: String,
+    required: true,
+  },
+  role: {
     type: String,
     required: true,
   }
@@ -60,6 +64,6 @@ UserSchema.set("toJSON", {
   },
 });
 
-const User = mongoose.model<UserFront, UserModel>("User", UserSchema);
+const User = mongoose.model<User, UserModel>("User", UserSchema);
 
 export default User;

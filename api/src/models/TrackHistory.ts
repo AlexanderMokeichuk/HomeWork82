@@ -1,7 +1,7 @@
 import {model, Schema} from "mongoose";
-import {TrackHistoryFront} from "../type";
+import {TrackHistory} from "../type";
 
-const TrackHistorySchema = new Schema<TrackHistoryFront>({
+const TrackHistorySchema = new Schema<TrackHistory>({
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
