@@ -3,15 +3,17 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {selectUser} from "../Users/usersSlice";
 import {useNavigate} from "react-router-dom";
 import {fetchTrackHistory} from "./tracksHistoryThunks";
-import {selectHistory} from "./tracksHistorySlice";
+import {selectHistory, selectTracksHistoryLauding} from "./tracksHistorySlice";
 import {Grid} from "@mui/material";
 import TrackHistoryCard from "./components/TrackHistoryCard/TrackHistoryCard";
+import Spinner from "../../UI/components/Spinner/Spinner";
 
 const TracksHistory: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const tracks = useAppSelector(selectHistory);
+  const lauding = useAppSelector(selectTracksHistoryLauding);
 
 
   useEffect(  () => {
@@ -22,13 +24,23 @@ const TracksHistory: React.FC = () => {
     }
   }, [navigate, user, dispatch]);
 
-  console.log(tracks);
   return (
-    <Grid container justifyContent={"center"} padding={2} gap={2}>
-      {tracks.map((item) => {
-        return <TrackHistoryCard key={item._id} item={item} />;
-      })}
-    </Grid>
+    <>
+      {lauding
+        ? (
+          <Grid container justifyContent={"center"}>
+            <Spinner />
+          </Grid>
+        )
+        : (
+          <Grid container justifyContent={"center"} padding={2} gap={2}>
+            {tracks.map((item) => {
+              return <TrackHistoryCard key={item._id} item={item} />;
+            })}
+          </Grid>
+        )
+      }
+    </>
   );
 };
 

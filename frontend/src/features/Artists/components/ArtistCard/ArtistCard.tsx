@@ -1,9 +1,10 @@
-import {Card, CardActions, CardContent, Grid, IconButton} from "@mui/material";
+import {Box, Card, CardActions, CardContent, Grid, IconButton} from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import React from "react";
 import {Link} from "react-router-dom";
 import {ArtistsApi} from "../../../../type";
-import {API_URL, IMAGE_CARD_MEDIA} from "../../../../constants";
+import {API_URL} from "../../../../constants";
+import imageNotAvailable from "../../../../../public/noImage.png";
 
 interface Props {
   artist: ArtistsApi,
@@ -11,13 +12,27 @@ interface Props {
 
 
 const ArtistCard: React.FC<Props> = ({artist}) => {
+  let cardImage = imageNotAvailable;
+
+  if (artist.image !== null) {
+    cardImage = API_URL + '/' + artist.image;
+  }
+
   return (
     <Grid item xs md={4} lg={3}>
       <Card sx={{
         width: 250,
-        bgcolor: '#ADD8E6',
       }}>
-        <IMAGE_CARD_MEDIA image={API_URL + '/' + artist.image}/>
+        <Box
+          component="img"
+          sx={{
+            height: 233,
+            width: 350,
+            maxHeight: { xs: 233, md: 167 },
+            maxWidth: { xs: 350, md: 250 },
+          }}
+            src={cardImage}
+        />
         <CardContent>
           {artist.name}
         </CardContent>

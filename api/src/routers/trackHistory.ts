@@ -33,7 +33,7 @@ trackHistoryRouter.get("/", auth, async (req, res, next) => {
   try {
     const trackHistory = await TrackHistory
       .find({user: user._id})
-      .sort({date: -1})
+      .sort({datetime: -1})
       .populate({path: 'track', select: 'name'})
       .populate({path: 'artist', select: 'name'});
 

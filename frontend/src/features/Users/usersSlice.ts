@@ -29,23 +29,23 @@ export const usersSlice = createSlice({
       state.registerError = null;
     });
     builder.addCase(registration.fulfilled, (state, {payload: user}) => {
-      state.registerLoading = false;
       state.user = user;
+      state.registerLoading = false;
     });
     builder.addCase(registration.rejected, (state, {payload: error}) => {
-      state.registerLoading = false;
       state.registerError = error || null;
+      state.registerLoading = false;
     });
 
     builder.addCase(login.pending, (state) => {
       state.loginLoading = true;
       state.loginError = null;
     }).addCase(login.fulfilled, (state, {payload: user}) => {
-      state.loginLoading = false;
       state.user = user;
-    }).addCase(login.rejected, (state, {payload: error}) => {
       state.loginLoading = false;
+    }).addCase(login.rejected, (state, {payload: error}) => {
       state.loginError = error || null;
+      state.loginLoading = false;
     });
   }
 });
@@ -53,7 +53,5 @@ export const usersSlice = createSlice({
 export const usersReducer = usersSlice.reducer;
 
 export const selectUser = (state: RootState) => state.users.user;
-export const selectRegisterLoading = (state: RootState) => state.users.registerLoading;
 export const selectRegisterError = (state: RootState) => state.users.registerError;
 export const selectLoginError = (state: RootState) => state.users.loginError;
-export const selectLoginLoading = (state: RootState) => state.users.loginLoading;

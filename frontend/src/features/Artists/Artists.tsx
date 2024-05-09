@@ -4,7 +4,7 @@ import {selectArtists, selectLaudingArtists} from "./artistsSlice";
 import {fetchArtists} from "./artistsThunks";
 import {Grid} from "@mui/material";
 import ArtistCard from "./components/ArtistCard/ArtistCard";
-import Spinner from "../../Ul/components/Spinner/Spinner";
+import Spinner from "../../UI/components/Spinner/Spinner";
 
 const Artists: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -16,7 +16,12 @@ const Artists: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <Grid container display={"flex"} marginTop={20} alignItems={"center"} justifyContent={"center"} gap={2}>
+    <Grid
+      container
+      marginTop={20}
+      alignItems={"center"}
+      justifyContent={"center"}
+      gap={2}>
       {lauding
         ? <Spinner />
         : artists.map((item) => {

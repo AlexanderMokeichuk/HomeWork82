@@ -21,11 +21,12 @@ export const fetchTrackHistory = createAsyncThunk<TracksHistoryApi[], string>(
   "tracksHistory/fetchTrackHistory",
   async (token) => {
     try {
-      const {data: response} = await axiosApi.get("/track_history", {
+      const {data: response} = await axiosApi.get<TracksHistoryApi[]>("/track_history", {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
+
       return response;
     } catch (e) {
       console.log(e);

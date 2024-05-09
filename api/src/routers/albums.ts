@@ -34,7 +34,7 @@ albumsRouter.get("/", async (req, res, next) => {
       if (!mongoose.Types.ObjectId.isValid(query)) {
         return res.status(422).send({ error: 'Not found artist!!' });
       }
-      const albumsById = await Album.find({artist: query}).sort({createdAr: -1});
+      const albumsById = await Album.find({artist: query}).sort({createdAt: - 1});
       return res.send(albumsById);
     }
 

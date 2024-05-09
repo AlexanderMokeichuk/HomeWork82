@@ -7,8 +7,10 @@ export const registration = createAsyncThunk<User, RegisterMutation, {rejectValu
   'users/registration',
   async (registerMutation, {rejectWithValue}) => {
     try {
-      const response = await axiosApi.post<RegisterResponse>('/users', registerMutation);
-      return response.data.user;
+      const {data: response} = await axiosApi.post<RegisterResponse>('/users', registerMutation);
+
+      console.log(response.user);
+      return response.user;
     } catch (error) {
       if (isAxiosError(error) && error.response && error.response.status === 422) {
         return rejectWithValue(error.response.data);

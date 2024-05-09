@@ -8,6 +8,9 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 import {selectUser} from "../../../Users/usersSlice";
 import {postTrackHistory} from "../../../TracksHistory/tracksHistoryThunks";
+import imageNotAvailable from '../../../../../public/noImage.png';
+import {selectLaudingButton} from "../../../TracksHistory/tracksHistorySlice";
+
 
 interface Props {
   album: InfoAlbum,
@@ -18,6 +21,8 @@ const TrackCard: React.FC<Props> = ({track, album}) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+  const laudingButton = useAppSelector(selectLaudingButton);
+
 
   const postHistory = async () => {
     if (user) {
@@ -25,25 +30,13 @@ const TrackCard: React.FC<Props> = ({track, album}) => {
     }
   };
 
-  let multiMedia = <div></div>;
-  if (user) {
-    multiMedia = (
-      <Grid container border={1} borderRadius={2} marginRight={2}>
-        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-          <IconButton aria-label="previous">
-            {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-          </IconButton>
-          <IconButton aria-label="play/pause" onClick={postHistory}>
-            <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-          </IconButton>
-          <IconButton aria-label="next">
-            {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-          </IconButton>
-        </Box>
-      </Grid>
-    );
+  let cardImage = imageNotAvailable;
+
+  if (album.image !== null) {
+    cardImage = API_URL + '/' + album.image;
   }
-  
+
+
   return (
     <Alert icon={false} sx={{
       background: "#2F4F4F",
@@ -62,7 +55,7 @@ const TrackCard: React.FC<Props> = ({track, album}) => {
           <img
             width={50}
             height={50}
-            src={API_URL + '/' + album.image}
+            src={cardImage}
             alt={"№"}
             style={{
               borderRadius: 8,
@@ -74,7 +67,19 @@ const TrackCard: React.FC<Props> = ({track, album}) => {
             <Box sx={{ whiteSpace: "pre-wrap" }} minWidth={150} maxWidth={150}>{track.name}</Box>
           </Grid>
 
-          {multiMedia}
+          <Grid container border={1} borderRadius={2} marginRight={2}>
+            <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+              <IconButton aria-label="previous">
+                {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
+              </IconButton>
+              <IconButton aria-label="play/pause" onClick={postHistory} disabled={laudingButton}>
+                <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+              </IconButton>
+              <IconButton aria-label="next">
+                {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
+              </IconButton>
+            </Box>
+          </Grid>
 
           </Grid>
 

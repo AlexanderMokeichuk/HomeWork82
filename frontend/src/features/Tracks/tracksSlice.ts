@@ -7,14 +7,12 @@ interface TracksSlice {
   fullInfoAlbum: InfoAlbum | null,
   tracks: TrackApi[],
   laudingFullInfo: boolean,
-  laudingTracks: boolean,
 }
 
 const InitialState: TracksSlice = {
   fullInfoAlbum: null,
   tracks: [],
   laudingFullInfo: false,
-  laudingTracks: false,
 };
 
 const tracksSlice = createSlice({
@@ -33,7 +31,6 @@ const tracksSlice = createSlice({
 
     builder.addCase(fetchTracksFromAlbum.fulfilled, (state, {payload: traks}: PayloadAction<TrackApi[]>) => {
       state.tracks = traks;
-      state.laudingTracks = false;
     });
   },
 });
@@ -43,4 +40,3 @@ export const tracksReducer = tracksSlice.reducer;
 export const selectFullInfoAlbum = (state: RootState) => state.tracks.fullInfoAlbum;
 export const selectTracks = (state: RootState) => state.tracks.tracks;
 export const selectLaudingFullInfo = (state: RootState) => state.tracks.laudingFullInfo;
-export const selectLaudingTracks = (state: RootState) => state.tracks.laudingTracks;

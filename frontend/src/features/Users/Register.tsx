@@ -28,7 +28,7 @@ const Register = () => {
     event.preventDefault();
     try {
       await dispatch(registration(state)).unwrap();
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

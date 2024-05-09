@@ -1,91 +1,124 @@
 import React, {useEffect} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {fetchAlbumById, fetchTracksFromAlbum} from "./tracksThinks";
-import {selectFullInfoAlbum, selectLaudingFullInfo, selectLaudingTracks, selectTracks} from "./tracksSlice";
-import {Card, CardActionArea, CardContent, Grid, Typography} from "@mui/material";
-import Spinner from "../../Ul/components/Spinner/Spinner";
-import {API_URL, IMAGE_CARD_MEDIA} from "../../constants";
+import {selectFullInfoAlbum, selectLaudingFullInfo, selectTracks} from "./tracksSlice";
+import {Box, Grid, Typography} from "@mui/material";
+import Spinner from "../../UI/components/Spinner/Spinner";
 import TrackCard from "./comonents/TrackCard/TrackCard";
+import {selectUser} from "../Users/usersSlice";
+import {API_URL} from "../../constants";
 
 const Tracks: React.FC = () => {
+  const navigate = useNavigate();
   const {id} = useParams();
   const dispatch = useAppDispatch();
   const infAlbum = useAppSelector(selectFullInfoAlbum);
   const tracks = useAppSelector(selectTracks);
   const laudingAlbum = useAppSelector(selectLaudingFullInfo);
-  const laudingTraks = useAppSelector(selectLaudingTracks);
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchAlbumById(id));
-      dispatch(fetchTracksFromAlbum(id));
+    if (user) {
+      if (id) {
+        dispatch(fetchAlbumById(id));
+        dispatch(fetchTracksFromAlbum(id));
+      }
+    } else {
+      navigate(-1);
     }
-  }, [id, dispatch]);
+  }, [id, dispatch, user, navigate]);
 
   return (
-    <Grid container direction={"column"}>
-      <Grid item xs mt={2}>
-        {laudingAlbum
-          ? (
-            <Grid container justifyContent={'center'}>
-              <Spinner />
-            </Grid>
-          )
-          : (
-            <Card sx={{ maxWidth: 300 }}>
-              <CardActionArea>
-                <IMAGE_CARD_MEDIA image={API_URL + '/' + infAlbum?.artist.image}/>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {infAlbum?.artist.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {infAlbum?.artist.description}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          )
-        }
-      </Grid>
-
-      <Grid container mt={5} direction={"column"} bgcolor={"gray"} padding={2} borderRadius={2}>
-        {laudingTraks
-          ? (
-            <Grid container justifyContent={'center'}>
-              <Spinner />
-            </Grid>
-          )
-          : (
-            <Grid container gap={2}>
-              <Card sx={{ width: 300, height: 300 }}>
-                <CardActionArea>
-                  <IMAGE_CARD_MEDIA image={API_URL + '/' + infAlbum?.image}/>
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {infAlbum?.name}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-
-              <Grid item xs display={"flex"} flexDirection={"column"} gap={2}>
-                {tracks.map((track) => {
-                  return (
-                    <TrackCard
-                      key={track._id}
-                      track={track}
-                      album={infAlbum!}
-                    />
-                  );
-                })}
+    <>
+      {laudingAlbum
+        ? (
+          <Grid container justifyContent={"center"}>
+            <Spinner/>
+          </Grid>
+        )
+        : (
+          <Grid container direction={"column"}>
+            <Grid
+              item
+              sx={{
+                display: "flex",
+                gap: 5,
+                mt: 3,
+              }}
+            >
+              {infAlbum?.artist.image
+                ? (
+                  <Box
+                    component="img"
+                    sx={{
+                      height: 200,
+                      width: 250,
+                      borderRadius: 2
+                    }}
+                    src={`${API_URL}/${infAlbum.artist.image}`}
+                  />
+                )
+                : undefined
+              }
+              <Grid item>
+                <Typography gutterBottom variant="h5" component="div" color={"white"}>
+                  {infAlbum?.artist.name}
+                </Typography>
+                <Typography variant="body2" color={"white"}>
+                  {infAlbum?.artist.description}
+                </Typography>
               </Grid>
             </Grid>
-          )
-        }
-      </Grid>
-    </Grid>
+
+            <Grid container mt={5} direction={"column"} bgcolor={"gray"} padding={2} borderRadius={2}>
+              <Grid
+                item
+                sx={{
+                  display: "flex",
+                }}
+              >
+                <Grid item width={"30%"} sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center"
+                }}>
+                  {infAlbum !== null && infAlbum.image !== null
+                    ? (
+                      <Box
+                        component="img"
+                        sx={{
+                          height: 250,
+                          width: 280,
+                        }}
+                        src={`${API_URL}/${infAlbum.image}`}
+                      />
+                    )
+                    : undefined
+                  }
+                  <Typography variant={"h5"}>
+                    {infAlbum?.name}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs display={"flex"} flexDirection={"column"} gap={2}>
+                  {tracks.map((track) => {
+                    return (
+                      <TrackCard
+                        key={track._id}
+                        track={track}
+                        album={infAlbum!}
+                      />
+                    );
+                  })}
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+
+        )
+      }
+    </>
   );
 };
 

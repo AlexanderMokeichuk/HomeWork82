@@ -7,7 +7,10 @@ const ArtistSchema = new Schema<ArtistFront>({
     type: String,
     required: true,
   },
-  image: String || null,
+  image: {
+    type: String || null,
+    required: true,
+  },
   description: String,
 },{
   versionKey: false,

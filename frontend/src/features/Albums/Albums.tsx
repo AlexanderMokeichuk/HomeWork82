@@ -4,7 +4,7 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {fetchAlbumsByQuery} from "./albumsThunks";
 import {selectAlbums, selectLaudingAlbums} from "./albumsSlice";
 import {Grid} from "@mui/material";
-import Spinner from "../../Ul/components/Spinner/Spinner";
+import Spinner from "../../UI/components/Spinner/Spinner";
 import AlbumCard from "./components/AlbumCard/AlbumCard";
 
 const Albums: React.FC = () => {

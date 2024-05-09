@@ -32,6 +32,7 @@ export interface TracksHistory {
 export interface TracksHistoryApi {
   _id: string,
   user: string,
+  datetime: string,
   track: {
     _id: string,
     name: 'Не сначала'

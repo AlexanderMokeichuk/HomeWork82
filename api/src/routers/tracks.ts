@@ -7,7 +7,6 @@ const tracksRouter = express.Router();
 
 tracksRouter.post("/", async (req, res, next) => {
   try {
-    const tracksLength = await Track.find({album: req.body.album});
     const trackPost: TrackFront = {
       name: req.body.name,
       album: req.body.album,

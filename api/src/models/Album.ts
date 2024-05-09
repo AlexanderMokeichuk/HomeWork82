@@ -16,7 +16,10 @@ const AlbumSchema = new Schema<AlbumFront>({
     type: Number,
     required: true,
   },
-  image: String || null,
+  image: {
+    type: String || null,
+    required: true,
+  },
 },{
   versionKey: false,
 });
