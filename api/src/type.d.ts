@@ -5,6 +5,7 @@ export interface ArtistFront {
   name: string,
   image: string | null,
   description: string | null,
+  isPublished: boolean,
 }
 
 export interface AlbumFront {
@@ -12,6 +13,7 @@ export interface AlbumFront {
   artist: Types.ObjectId,
   createdAt: number,
   image: string | null,
+  isPublished: boolean,
 }
 
 export interface TrackFront {
@@ -19,19 +21,21 @@ export interface TrackFront {
   album: Types.ObjectId,
   duration: string,
   item: number,
+  isPublished: boolean,
 }
 
-export interface UserFront {
+export interface User {
   username: string,
   password: string,
   token: string,
+  role: string,
 }
 
-export interface UserApi extends UserFront {
+export interface UserApi extends User {
   _id: Types.ObjectId;
 }
 
-export interface TrackHistoryFront {
+export interface TrackHistory {
   user: Types.ObjectId,
   track: Types.ObjectId,
   artist: Types.ObjectId,
@@ -59,4 +63,4 @@ export interface UserMethods {
   generateToken(): void,
 }
 
-export type UserModel = Model<UserFront, unknown, UserMethods>;
+export type UserModel = Model<User, unknown, UserMethods>;
