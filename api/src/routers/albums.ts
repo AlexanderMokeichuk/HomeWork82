@@ -1,18 +1,20 @@
 import express from "express";
 import {imagesUpload} from "../multer";
-import {AlbumApi, AlbumArtistData, AlbumFront} from "../type";
+import {AlbumFront, AlbumApi, AlbumArtistData} from "../type";
 import Album from "../models/Album";
 import mongoose from "mongoose";
+import auth, {RequestWithUser} from "../middleware/auth";
 
 const albumsRouter = express.Router();
 
-albumsRouter.post("/", imagesUpload.single("image"), async (req, res, next) => {
+albumsRouter.post("/", auth, imagesUpload.single("image"), async (req, res, next) => {
   try {
     const postAlbum: AlbumFront = {
       name: req.body.name,
       artist: req.body.artist,
       createdAt: req.body.createdAt,
       image: req.file ? req.file.filename : null,
+      isPublished: false,
     };
 
     const album = new Album(postAlbum);
@@ -65,6 +67,25 @@ albumsRouter.get('/:id', async (req, res, next) => {
     return res.send(albumById);
   } catch (e) {
     next(e);
+  }
+});
+
+albumsRouter.delete('/:id', auth, async (req, res, next) => {
+  const id = req.params.id;
+  const user = (req as RequestWithUser).user!;
+  try {
+
+    const album = await Album.find({_id: id});
+
+    if (user.role === "administrator") {
+      await Album.findOneAndDelete({_id: id});
+      return res.send({ message: 'Deleted!', id: id });
+    }
+
+
+    return res.status(403).send({ error: "Access is denied!!" });
+  } catch (e) {
+    next();
   }
 });
 

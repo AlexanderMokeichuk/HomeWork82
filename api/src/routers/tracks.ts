@@ -2,16 +2,20 @@ import express from "express";
 import {TrackApi, TrackFront} from "../type";
 import Track from "../models/Track";
 import mongoose from "mongoose";
+import auth, {RequestWithUser} from "../middleware/auth";
+import Album from "../models/Album";
+import artistsRouter from "./artists";
 
 const tracksRouter = express.Router();
 
-tracksRouter.post("/", async (req, res, next) => {
+tracksRouter.post("/", auth, async (req, res, next) => {
   try {
     const trackPost: TrackFront = {
       name: req.body.name,
       album: req.body.album,
       duration: req.body.duration,
       item: req.body.item,
+      isPublished: false,
     };
 
     const track = new Track(trackPost);
@@ -42,6 +46,25 @@ tracksRouter.get('/', async (req, res, next) => {
     return res.send(tracks);
   } catch (error) {
     next(error);
+  }
+});
+
+tracksRouter.delete('/:id', auth, async (req, res, next) => {
+  const id = req.params.id;
+  const user = (req as RequestWithUser).user!;
+  try {
+
+    const album = await Track.find({_id: id});
+
+    if (user.role === "administrator") {
+      await Track.findOneAndDelete({_id: id});
+      return res.send({ message: 'Deleted!', id: id });
+    }
+
+
+    return res.status(403).send({ error: "Access is denied!!" });
+  } catch (e) {
+    next();
   }
 });
 
