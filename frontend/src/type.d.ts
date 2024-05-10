@@ -29,6 +29,12 @@ export interface ArtistsApi {
   isPublished: boolean,
 }
 
+export interface Track {
+  name: string,
+  album: string,
+  duration: string,
+  item: string,
+}
 export interface TrackApi {
   _id: string,
   name: string,

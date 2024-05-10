@@ -1,6 +1,15 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {InfoAlbum, TrackApi} from "../../type";
+import {InfoAlbum, Track, TrackApi} from "../../type";
 import axiosApi from "../../axiosApi";
+
+
+export const postTrack = createAsyncThunk<void, Track>(
+  "tracks/postTrack",
+  async (track) => {
+
+    await axiosApi.post('/tracks', track);
+  }
+);
 
 export const fetchAlbumById = createAsyncThunk<InfoAlbum | null, string>(
   "tracks/fetchAlbumById",

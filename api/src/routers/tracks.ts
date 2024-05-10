@@ -9,12 +9,11 @@ const tracksRouter = express.Router();
 
 tracksRouter.post("/", auth, async (req, res, next) => {
   try {
-    const trackPost: TrackFront = {
+    const trackPost = {
       name: req.body.name,
       album: req.body.album,
       duration: req.body.duration,
-      item: req.body.item,
-      isPublished: false,
+      item: parseInt(req.body.item),
     };
 
     const track = new Track(trackPost);

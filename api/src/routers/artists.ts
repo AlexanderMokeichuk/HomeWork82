@@ -10,11 +10,10 @@ const artistsRouter = express.Router();
 
 artistsRouter.post("/", auth, imagesUpload.single("image"), async (req, res, next) => {
   try {
-    const postArtist: ArtistFront = {
+    const postArtist = {
       name: req.body.name,
       image: req.file ? req.file.filename : null,
       description: req.body.description,
-      isPublished: false,
     };
 
     const artist = new Artist(postArtist);

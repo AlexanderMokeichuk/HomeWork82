@@ -14,6 +14,7 @@ const ArtistSchema = new Schema<ArtistFront>({
   isPublished: {
     type: Boolean,
     required: true,
+    default: false,
   },
 },{
   versionKey: false,

@@ -23,6 +23,7 @@ const TrackSchema = new Schema<TrackFront>(
     isPublished: {
       type: Boolean,
       required: true,
+      default: false,
     },
   },
   {

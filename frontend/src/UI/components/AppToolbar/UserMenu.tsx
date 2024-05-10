@@ -47,14 +47,22 @@ const UserMenu: React.FC = () => {
             History tracks
           </Button>
         </Link>
+
         <Link to={"/addNewArtist"} style={{textDecoration: "none", color: "#FFF"}}>
           <Button color="inherit">
             Add artist
           </Button>
         </Link>
+
         <Link to={"/addNewAlbum"} style={{textDecoration: "none", color: "#FFF"}}>
           <Button color="inherit">
             Add album
+          </Button>
+        </Link>
+
+        <Link to={"/addNewTrack"} style={{textDecoration: "none", color: "#FFF"}}>
+          <Button color="inherit">
+            Add track
           </Button>
         </Link>
       </List>

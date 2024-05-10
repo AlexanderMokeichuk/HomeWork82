@@ -9,6 +9,7 @@ import TracksHistory from "./features/TracksHistory/TracksHistory";
 import NotFound from "./UI/components/NotFound/NotFound";
 import AddNewArtist from "./features/Artists/AddNewArtist";
 import AddNewAlbum from "./features/Albums/AddNewAlbum";
+import AddNewTrack from "./features/Tracks/AddNewTrack";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path={"/tracks/:id"} element={(<Tracks />)} />
         <Route path={"/addNewArtist"} element={(<AddNewArtist />)}/>
         <Route path={"/addNewAlbum"} element={(<AddNewAlbum />)}/>
+        <Route path={"/addNewTrack"} element={(<AddNewTrack />)}/>
         <Route path={"/register"} element={(<Register />)} />
         <Route path={"/login"} element={(<Login />)} />
         <Route path={"/track_history"} element={(<TracksHistory />)} />
