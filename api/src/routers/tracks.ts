@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 import auth, {RequestWithUser} from "../middleware/auth";
 import Album from "../models/Album";
 import artistsRouter from "./artists";
+import permit from "../middleware/permit";
+import Artist from "../models/Artist";
 
 const tracksRouter = express.Router();
 
@@ -30,13 +32,13 @@ tracksRouter.post("/", auth, async (req, res, next) => {
   }
 });
 
-tracksRouter.get('/', async (req, res, next) => {
+tracksRouter.get("/", async (req, res, next) => {
   const query = req.query.album as string;
 
   try {
     if (query) {
       if (!mongoose.Types.ObjectId.isValid(query)) {
-        return res.status(422).send({ error: 'Not found album!!' });
+        return res.status(422).send({error: "Not found album!!"});
       }
       const albumTracks = await Track.find({album: query}).sort({item: 1});
       return res.send(albumTracks);
@@ -49,7 +51,24 @@ tracksRouter.get('/', async (req, res, next) => {
   }
 });
 
-tracksRouter.delete('/:id', auth, async (req, res, next) => {
+tracksRouter.patch("/:id/togglePublished", auth, permit(["admin"]), async (req, res, next) => {
+  const {id} = req.params;
+
+  try {
+
+    const track = await Track.findById({_id: id});
+
+    if (!track) return res.status(400).send({error: "Not found track!"});
+
+    track.isPublished = !track.isPublished;
+    await track.save();
+    return res.send(track);
+  } catch (e) {
+    next(e);
+  }
+});
+
+tracksRouter.delete("/:id", auth, permit(["admin"]), async (req, res, next) => {
   const id = req.params.id;
   const user = (req as RequestWithUser).user!;
   try {
@@ -59,13 +78,8 @@ tracksRouter.delete('/:id', auth, async (req, res, next) => {
       return res.status(404).send({error: "Not found track!"});
     }
 
-    if (user.role === "admin") {
-      await Track.findOneAndDelete({_id: id});
-      return res.send({ message: 'Deleted!', id: id });
-    }
-
-
-    return res.status(403).send({ error: "Access is denied!!" });
+    await Track.findOneAndDelete({_id: id});
+    return res.send({message: "Deleted!", id: id});
   } catch (e) {
     next();
   }

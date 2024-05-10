@@ -5,6 +5,8 @@ import Album from "../models/Album";
 import mongoose from "mongoose";
 import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
+import Artist from "../models/Artist";
+import artistsRouter from "./artists";
 
 const albumsRouter = express.Router();
 
@@ -65,6 +67,23 @@ albumsRouter.get('/:id', async (req, res, next) => {
     }
 
     return res.send(albumById);
+  } catch (e) {
+    next(e);
+  }
+});
+
+albumsRouter.patch("/:id/togglePublished", auth, permit(["admin"]), async (req, res, next) => {
+  const {id} = req.params;
+
+  try {
+
+    const album = await Album.findById({_id: id});
+
+    if (!album) return res.status(400).send({error: "Not found album!"});
+
+    album.isPublished = !album.isPublished;
+    await album.save();
+    return res.send(album);
   } catch (e) {
     next(e);
   }

@@ -1,9 +1,11 @@
 import React from "react";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
-import {Avatar, Box, Button, SwipeableDrawer} from "@mui/material";
+import {Box, Button, IconButton, SwipeableDrawer} from "@mui/material";
 import {useAppDispatch} from "../../../app/hooks";
 import {logout} from "../../../features/Users/usersThunks";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import {Link} from "react-router-dom";
 
 const UserMenu: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -21,13 +23,31 @@ const UserMenu: React.FC = () => {
 
 
   const DrawerList = (
-    <Box sx={{ width: 250, paddingLeft: 2}} role="presentation" onClick={toggleDrawer(false)}>
+    <Box
+      sx={{
+        backgroundColor: "black",
+        border: 2,
+        borderColor: "white",
+        width: 250,
+        padding: 2,
+        height: "100%",
+        paddingLeft: 2,
+        display: "flex",
+        flexDirection: "column"
+    }}
+         role="presentation"
+         onClick={toggleDrawer(false)}
+    >
       <List>
-
+        <Link to={"/track_history"} style={{textDecoration: "none", color: "#FFF"}}>
+          <Button color="inherit">
+            History tracks
+          </Button>
+        </Link>
       </List>
       <Divider />
-      <List>
-        <Button color="inherit" onClick={handelLogout}>
+      <List sx={{marginTop: "auto", padding: 2}}>
+        <Button color="warning" onClick={handelLogout}>
           Logout
         </Button>
       </List>
@@ -36,7 +56,7 @@ const UserMenu: React.FC = () => {
 
   return (
     <div>
-      <Button onClick={toggleDrawer(true)}><Avatar src="/broken-image.jpg" /></Button>
+      <IconButton onClick={toggleDrawer(true)}><AccountCircleIcon/></IconButton>
       <SwipeableDrawer
         anchor={"right"}
         open={open}

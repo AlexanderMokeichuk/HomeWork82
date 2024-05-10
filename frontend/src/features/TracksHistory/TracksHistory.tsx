@@ -4,7 +4,7 @@ import {selectUser} from "../Users/usersSlice";
 import {useNavigate} from "react-router-dom";
 import {fetchTrackHistory} from "./tracksHistoryThunks";
 import {selectHistory, selectTracksHistoryLauding} from "./tracksHistorySlice";
-import {Grid} from "@mui/material";
+import {Alert, AlertTitle, Grid, Typography} from "@mui/material";
 import TrackHistoryCard from "./components/TrackHistoryCard/TrackHistoryCard";
 import Spinner from "../../UI/components/Spinner/Spinner";
 
@@ -33,11 +33,26 @@ const TracksHistory: React.FC = () => {
           </Grid>
         )
         : (
-          <Grid container justifyContent={"center"} padding={2} gap={2}>
-            {tracks.map((item) => {
-              return <TrackHistoryCard key={item._id} item={item} />;
-            })}
-          </Grid>
+          <>
+            {
+              !tracks.length
+                ? (
+                  <Alert severity="info" sx={{width: "100%", margin: "auto"}}>
+                    <AlertTitle>Info</AlertTitle>
+                    <Typography variant={"h6"}>
+                      History is empty!!
+                    </Typography>
+                  </Alert>
+                )
+                : undefined
+            }
+
+            <Grid container justifyContent={"center"} padding={2} gap={2}>
+              {tracks.map((item) => {
+                return <TrackHistoryCard key={item._id} item={item} />;
+              })}
+            </Grid>
+          </>
         )
       }
     </>
