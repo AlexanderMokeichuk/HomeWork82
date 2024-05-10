@@ -1,4 +1,4 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {RegisterMutation} from "../../type";
@@ -7,7 +7,7 @@ import {Link as RouterLink, useNavigate} from "react-router-dom";
 import {registration} from "./usersThunks";
 import {selectRegisterError} from "./usersSlice";
 
-const Register = () => {
+const Register: React.FC = () => {
   const dispatch = useAppDispatch();
   const error = useAppSelector(selectRegisterError);
   const navigate = useNavigate();

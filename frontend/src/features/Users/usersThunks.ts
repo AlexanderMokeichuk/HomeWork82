@@ -11,7 +11,6 @@ export const registration = createAsyncThunk<User, RegisterMutation, {rejectValu
     try {
       const {data: response} = await axiosApi.post<RegisterResponse>('/users', registerMutation);
 
-      console.log(response.user);
       return response.user;
     } catch (error) {
       if (isAxiosError(error) && error.response && error.response.status === 422) {
@@ -41,11 +40,8 @@ export const login = createAsyncThunk<User, LoginMutation, {rejectValue: GlobalE
 
 export const logout = createAsyncThunk<void, undefined, { state: RootState }>(
   'users/logout',
-  async (_, { getState, dispatch }) => {
-    const token = getState().users.user?.token;
-    await axiosApi.delete('/users/sessions', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+  async (_, { dispatch }) => {
+    await axiosApi.delete('/users/sessions',);
     dispatch(unsetUser());
   },
 );

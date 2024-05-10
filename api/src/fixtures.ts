@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import config from "./config";
 import Artist from "./models/Artist";
 import Album from "./models/Album";
-import Tracks from "./routers/tracks";
 import Track from "./models/Track";
 import User from "./models/User";
 

@@ -18,7 +18,7 @@ const TracksHistory: React.FC = () => {
 
   useEffect(  () => {
     if (user) {
-      dispatch(fetchTrackHistory(user.token));
+      dispatch(fetchTrackHistory());
     } else {
       navigate("/");
     }

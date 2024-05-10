@@ -9,6 +9,11 @@ export interface AlbumApi {
   isPublished: boolean,
 }
 
+export interface Artist {
+  name: string,
+  image: File | null,
+  description: string | null,
+}
 export interface ArtistsApi {
   _id: string,
   name: string,

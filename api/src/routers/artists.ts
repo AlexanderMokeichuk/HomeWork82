@@ -3,12 +3,8 @@ import Artist from "../models/Artist";
 import {imagesUpload} from "../multer";
 import {ArtistApi, ArtistFront} from "../type";
 import mongoose from "mongoose";
-import auth, {RequestWithUser} from "../middleware/auth";
-import Album from "../models/Album";
-import albumsRouter from "./albums";
+import auth from "../middleware/auth";
 import permit from "../middleware/permit";
-import Track from "../models/Track";
-import tracksRouter from "./tracks";
 
 const artistsRouter = express.Router();
 
@@ -44,9 +40,7 @@ artistsRouter.get("/", async (_req, res, next) => {
 
 artistsRouter.patch("/:id/togglePublished", auth, permit(["admin"]), async (req, res, next) => {
   const {id} = req.params;
-
   try {
-
     const artist = await Artist.findById({_id: id});
 
     if (!artist) return res.status(400).send({error: "Not found artist!"});
@@ -61,7 +55,6 @@ artistsRouter.patch("/:id/togglePublished", auth, permit(["admin"]), async (req,
 
 artistsRouter.delete("/:id", auth, permit(["admin"]), async (req, res, next) => {
   const id = req.params.id;
-  const user = (req as RequestWithUser).user!;
   try {
 
     const artist = await Artist.findOne({_id: id});

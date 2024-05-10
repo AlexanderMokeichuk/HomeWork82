@@ -6,26 +6,18 @@ export const postTrackHistory = createAsyncThunk<void, TracksHistory>(
   "tracksHistory/postHistory",
   async (history) => {
     try {
-      await axiosApi.post("/track_history", {track: history.track, artist: history.artist}, {
-        headers: {
-          Authorization: `Bearer ${history.token}`,
-        }
-      });
+      await axiosApi.post("/track_history", {track: history.track, artist: history.artist});
     } catch (e) {
       console.log(e);
     }
   },
 );
 
-export const fetchTrackHistory = createAsyncThunk<TracksHistoryApi[], string>(
+export const fetchTrackHistory = createAsyncThunk<TracksHistoryApi[], undefined>(
   "tracksHistory/fetchTrackHistory",
-  async (token) => {
+  async () => {
     try {
-      const {data: response} = await axiosApi.get<TracksHistoryApi[]>("/track_history", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const {data: response} = await axiosApi.get<TracksHistoryApi[]>("/track_history");
 
       return response;
     } catch (e) {

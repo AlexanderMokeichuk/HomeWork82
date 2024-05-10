@@ -2,11 +2,8 @@ import express from "express";
 import {TrackApi, TrackFront} from "../type";
 import Track from "../models/Track";
 import mongoose from "mongoose";
-import auth, {RequestWithUser} from "../middleware/auth";
-import Album from "../models/Album";
-import artistsRouter from "./artists";
+import auth from "../middleware/auth";
 import permit from "../middleware/permit";
-import Artist from "../models/Artist";
 
 const tracksRouter = express.Router();
 
@@ -70,7 +67,6 @@ tracksRouter.patch("/:id/togglePublished", auth, permit(["admin"]), async (req, 
 
 tracksRouter.delete("/:id", auth, permit(["admin"]), async (req, res, next) => {
   const id = req.params.id;
-  const user = (req as RequestWithUser).user!;
   try {
 
     const track = await Track.findOne({_id: id});

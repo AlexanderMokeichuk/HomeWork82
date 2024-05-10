@@ -44,6 +44,11 @@ const UserMenu: React.FC = () => {
             History tracks
           </Button>
         </Link>
+        <Link to={"/addNewArtist"} style={{textDecoration: "none", color: "#FFF"}}>
+          <Button color="inherit">
+            Add artist
+          </Button>
+        </Link>
       </List>
       <Divider />
       <List sx={{marginTop: "auto", padding: 2}}>

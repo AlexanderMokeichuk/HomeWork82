@@ -1,12 +1,10 @@
 import express from "express";
 import {imagesUpload} from "../multer";
-import {AlbumFront, AlbumApi, AlbumArtistData} from "../type";
+import {AlbumApi, AlbumArtistData} from "../type";
 import Album from "../models/Album";
 import mongoose from "mongoose";
-import auth, {RequestWithUser} from "../middleware/auth";
+import auth from "../middleware/auth";
 import permit from "../middleware/permit";
-import Artist from "../models/Artist";
-import artistsRouter from "./artists";
 
 const albumsRouter = express.Router();
 
@@ -91,7 +89,6 @@ albumsRouter.patch("/:id/togglePublished", auth, permit(["admin"]), async (req, 
 
 albumsRouter.delete('/:id', auth, permit(["admin"]), async (req, res, next) => {
   const id = req.params.id;
-  const user = (req as RequestWithUser).user!;
   try {
 
     const album = await Album.findOne({_id: id});

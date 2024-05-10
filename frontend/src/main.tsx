@@ -7,6 +7,9 @@ import {persistor, store} from "./app/store";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import theme from "./theme";
 import {PersistGate} from "redux-persist/integration/react";
+import {addInterceptors} from "./axiosApi";
+
+addInterceptors(store);
 
 const app = (
   <React.StrictMode>
