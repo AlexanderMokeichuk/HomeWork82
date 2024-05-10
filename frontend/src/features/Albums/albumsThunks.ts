@@ -1,6 +1,21 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import axiosApi from "../../axiosApi";
-import {AlbumApi} from "../../type";
+import {Album, AlbumApi} from "../../type";
+
+export const postAlbum = createAsyncThunk<void, Album>(
+  "albums/postAlbums",
+  async (album) => {
+    const formData = new FormData();
+
+    const keys = Object.keys(album) as (keyof Album)[];
+    keys.forEach(key => {
+      const value = album[key];
+      if (value !== null) formData.append(key, value);
+    });
+
+    await axiosApi.post('/albums', formData);
+  }
+);
 
 export const fetchAlbumsByQuery = createAsyncThunk<AlbumApi[], string>(
   "albums/fetchAlbums",

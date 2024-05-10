@@ -1,5 +1,12 @@
 import {OutletProps} from "react-router-dom";
 
+export interface Album {
+  name: string,
+  artist: string,
+  createdAt: string,
+  image: File | null,
+}
+
 export interface AlbumApi {
   _id: string,
   name: string,

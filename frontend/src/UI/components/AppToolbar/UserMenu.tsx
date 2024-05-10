@@ -38,7 +38,10 @@ const UserMenu: React.FC = () => {
          role="presentation"
          onClick={toggleDrawer(false)}
     >
-      <List>
+      <List sx={{
+        display: "flex",
+        flexDirection: "column",
+      }}>
         <Link to={"/track_history"} style={{textDecoration: "none", color: "#FFF"}}>
           <Button color="inherit">
             History tracks
@@ -47,6 +50,11 @@ const UserMenu: React.FC = () => {
         <Link to={"/addNewArtist"} style={{textDecoration: "none", color: "#FFF"}}>
           <Button color="inherit">
             Add artist
+          </Button>
+        </Link>
+        <Link to={"/addNewAlbum"} style={{textDecoration: "none", color: "#FFF"}}>
+          <Button color="inherit">
+            Add album
           </Button>
         </Link>
       </List>
