@@ -1,10 +1,14 @@
-import {Box, Card, CardActions, CardContent, Grid, IconButton} from "@mui/material";
+import {Box, Button, Card, CardActions, CardContent, Grid, IconButton} from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import React from "react";
 import {Link} from "react-router-dom";
 import {ArtistsApi} from "../../../../type";
 import {API_URL} from "../../../../constants";
 import imageNotAvailable from "../../../../../public/noImage.png";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
+import {selectUser} from "../../../Users/usersSlice";
+import {deleteArtist, editIsPublishArtist, fetchArtists} from "../../artistsThunks";
 
 interface Props {
   artist: ArtistsApi,
@@ -12,14 +16,36 @@ interface Props {
 
 
 const ArtistCard: React.FC<Props> = ({artist}) => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
+
   let cardImage = imageNotAvailable;
 
   if (artist.image !== null) {
     cardImage = API_URL + '/' + artist.image;
   }
 
+  const deleteAlbumApi = async () => {
+    await dispatch(deleteArtist(artist._id));
+    await dispatch(fetchArtists());
+  };
+
+  const publish = async () => {
+    await dispatch(editIsPublishArtist(artist._id));
+    await dispatch(fetchArtists());
+  };
+
   return (
-    <Grid item xs md={4} lg={3}>
+    <Grid
+      item
+      xs
+      md={4}
+      lg={3}
+      style={user?.role === "user" || !user && !artist  .isPublished
+        ? {display: "none"}
+        : {display: "block"}
+      }
+    >
       <Card sx={{
         width: 250,
       }}>
@@ -36,11 +62,33 @@ const ArtistCard: React.FC<Props> = ({artist}) => {
         <CardContent>
           {artist.name}
         </CardContent>
-        <CardActions>
-          <IconButton component={Link} to={`/albums/${artist._id}`}>
-            <ArrowForwardIcon/>
-          </IconButton>
-        </CardActions>
+        <Grid item sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
+        }}>
+          <CardActions>
+            <IconButton component={Link} to={`/albums/${artist._id}`}>
+              <ArrowForwardIcon/>
+            </IconButton>
+          </CardActions>
+          {user?.role === "admin"
+            ? (
+              <Grid item>
+                <IconButton type={"button"} onClick={deleteAlbumApi}>
+                  <DeleteIcon/>
+                </IconButton>
+                <Button type={"button"} onClick={publish} sx={{color: "gray"}}>
+                  {artist.isPublished
+                    ? "Publish"
+                    : "Deactivate"
+                  }
+                </Button>
+              </Grid>
+            )
+            : undefined
+          }
+        </Grid>
       </Card>
     </Grid>
   );

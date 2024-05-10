@@ -36,3 +36,25 @@ export const fetchTracksFromAlbum = createAsyncThunk<TrackApi[], string>(
     }
   },
 );
+
+export const editIsPublishTrack = createAsyncThunk<void, string>(
+  "tracks/editTracks",
+  async (id) => {
+    try {
+      await axiosApi.patch(`/tracks/${id}/togglePublished`);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
+export const deleteTrack = createAsyncThunk<void, string>(
+  "tracks/deleteTrack",
+  async (id) => {
+    try {
+      await axiosApi.delete(`/tracks/${id}`);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);

@@ -134,11 +134,9 @@ const AddNewTrack: React.FC = () => {
           <TextField
             id="outlined-multiline-flexible"
             name={"duration"}
+            label={"Duration"}
             required
             multiline
-            fullWidth={true}
-            minRows={2}
-            maxRows={10}
 
             value={formState.duration}
             onChange={onChangeForm}

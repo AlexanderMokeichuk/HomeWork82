@@ -39,7 +39,7 @@ const Albums: React.FC = () => {
             }
             {
               albums.map((album) => {
-                return <AlbumCard key={album._id} album={album} />;
+                return <AlbumCard key={album._id} album={album} artist={id!} />;
               })
             }
           </>

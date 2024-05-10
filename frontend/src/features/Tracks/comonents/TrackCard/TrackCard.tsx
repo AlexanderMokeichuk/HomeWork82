@@ -1,6 +1,6 @@
 import React from "react";
 import {InfoAlbum, TrackApi} from "../../../../type";
-import {Alert, Box, Grid, IconButton, useTheme} from "@mui/material";
+import {Alert, Box, Button, Grid, IconButton, useTheme} from "@mui/material";
 import {API_URL} from "../../../../constants";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
@@ -8,8 +8,10 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 import {selectUser} from "../../../Users/usersSlice";
 import {postTrackHistory} from "../../../TracksHistory/tracksHistoryThunks";
-import imageNotAvailable from '../../../../../public/noImage.png';
+import imageNotAvailable from "../../../../../public/noImage.png";
 import {selectLaudingButton} from "../../../TracksHistory/tracksHistorySlice";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {deleteTrack, editIsPublishTrack, fetchTracksFromAlbum} from "../../tracksThinks";
 
 
 interface Props {
@@ -37,8 +39,24 @@ const TrackCard: React.FC<Props> = ({track, album}) => {
   }
 
 
+  const deleteAlbumApi = async () => {
+    await dispatch(deleteTrack(track._id));
+    await dispatch(fetchTracksFromAlbum(album._id));
+  };
+
+  const publish = async () => {
+    await dispatch(editIsPublishTrack(track._id));
+    await dispatch(fetchTracksFromAlbum(album._id));
+  };
+
   return (
-    <Alert icon={false} sx={{
+    <Alert
+      style={user?.role === "user" || !user && !track.isPublished
+        ? {display: "none"}
+        : {display: "block"}
+      }
+      icon={false}
+      sx={{
       background: "#2F4F4F",
       borderRadius: 2,
       padding: 0,
@@ -83,8 +101,33 @@ const TrackCard: React.FC<Props> = ({track, album}) => {
 
           </Grid>
 
-        <Grid item marginLeft={"auto"} marginRight={1}>
+        <Grid
+          item
+          marginLeft={"auto"}
+          marginRight={1}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center"
+          }}
+        >
           <span style={{color: "gray"}}>{track.duration}</span>
+          {user?.role === "admin"
+            ? (
+              <Grid item>
+                <IconButton type={"button"} onClick={deleteAlbumApi}>
+                  <DeleteIcon/>
+                </IconButton>
+                <Button type={"button"} onClick={publish} sx={{color: "gray"}}>
+                  {track.isPublished
+                    ? "Publish"
+                    : "Deactivate"
+                  }
+                </Button>
+              </Grid>
+            )
+            : undefined
+          }
         </Grid>
       </Grid>
     </Alert>

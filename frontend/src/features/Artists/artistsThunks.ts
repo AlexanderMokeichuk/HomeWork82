@@ -29,3 +29,25 @@ export const fetchArtists = createAsyncThunk<ArtistsApi[], undefined>(
     }
   },
 );
+
+export const editIsPublishArtist = createAsyncThunk<void, string>(
+  "artist/editArtist",
+  async (id) => {
+    try {
+      await axiosApi.patch(`/artists/${id}/togglePublished`);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
+export const deleteArtist = createAsyncThunk<void, string>(
+  "artist/deleteArtist",
+  async (id) => {
+    try {
+      await axiosApi.delete(`/artists/${id}`);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);

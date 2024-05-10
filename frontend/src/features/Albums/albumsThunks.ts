@@ -30,3 +30,25 @@ export const fetchAlbumsByQuery = createAsyncThunk<AlbumApi[], string>(
     }
   },
 );
+
+export const editIsPublishAlbum = createAsyncThunk<void, string>(
+  "albums/editAlbum",
+  async (id) => {
+    try {
+      await axiosApi.patch(`/albums/${id}/togglePublished`);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
+export const deleteAlbum = createAsyncThunk<void, string>(
+  "albums/deleteAlbum",
+  async (id) => {
+    try {
+      await axiosApi.delete(`/albums/${id}`);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
