@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {fetchAlbumsByQuery} from "./albumsThunks";
 import {selectAlbums, selectLaudingAlbums} from "./albumsSlice";
-import {Grid} from "@mui/material";
+import {Alert, AlertTitle, Grid, Typography} from "@mui/material";
 import Spinner from "../../UI/components/Spinner/Spinner";
 import AlbumCard from "./components/AlbumCard/AlbumCard";
 
@@ -23,9 +23,27 @@ const Albums: React.FC = () => {
     <Grid container display={"flex"} marginTop={20} alignItems={"center"} justifyContent={"center"} gap={2}>
       {lauding
         ? <Spinner />
-        : albums.map((album) => {
-          return <AlbumCard key={album._id} album={album} />;
-        })
+        : (
+          <>
+            {
+              !albums.length
+                ? (
+                  <Alert severity="info" sx={{width: "100%"}}>
+                    <AlertTitle>Info</AlertTitle>
+                    <Typography variant={"h4"}>
+                      This Artist has no albums!!
+                    </Typography>
+                  </Alert>
+                )
+                : undefined
+            }
+            {
+              albums.map((album) => {
+                return <AlbumCard key={album._id} album={album} />;
+              })
+            }
+          </>
+        )
       }
     </Grid>
   );

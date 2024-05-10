@@ -4,17 +4,17 @@ import {AlbumFront, AlbumApi, AlbumArtistData} from "../type";
 import Album from "../models/Album";
 import mongoose from "mongoose";
 import auth, {RequestWithUser} from "../middleware/auth";
+import permit from "../middleware/permit";
 
 const albumsRouter = express.Router();
 
 albumsRouter.post("/", auth, imagesUpload.single("image"), async (req, res, next) => {
   try {
-    const postAlbum: AlbumFront = {
+    const postAlbum = {
       name: req.body.name,
       artist: req.body.artist,
       createdAt: req.body.createdAt,
       image: req.file ? req.file.filename : null,
-      isPublished: false,
     };
 
     const album = new Album(postAlbum);
@@ -70,20 +70,18 @@ albumsRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-albumsRouter.delete('/:id', auth, async (req, res, next) => {
+albumsRouter.delete('/:id', auth, permit(["admin"]), async (req, res, next) => {
   const id = req.params.id;
   const user = (req as RequestWithUser).user!;
   try {
 
-    const album = await Album.find({_id: id});
-
-    if (user.role === "administrator") {
-      await Album.findOneAndDelete({_id: id});
-      return res.send({ message: 'Deleted!', id: id });
+    const album = await Album.findOne({_id: id});
+    if (!album) {
+      return res.status(404).send({error: "Not found album!"});
     }
 
-
-    return res.status(403).send({ error: "Access is denied!!" });
+    await Album.findOneAndDelete({_id: id});
+    return res.send({ message: 'Deleted!', id: id });
   } catch (e) {
     next();
   }

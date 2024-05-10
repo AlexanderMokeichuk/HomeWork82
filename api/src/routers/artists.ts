@@ -39,20 +39,23 @@ artistsRouter.get("/", async (_req, res, next) => {
   }
 });
 
-artistsRouter.delete('/:id', auth, async (req, res, next) => {
+artistsRouter.delete("/:id", auth, async (req, res, next) => {
   const id = req.params.id;
   const user = (req as RequestWithUser).user!;
   try {
 
-    const album = await Artist.find({_id: id});
+    const artist = await Artist.findOne({_id: id});
+    if (!artist) {
+      return res.status(404).send({error: "Not found artist!"});
+    }
 
-    if (user.role === "administrator") {
+    if (user.role === "admin") {
       await Artist.findOneAndDelete({_id: id});
-      return res.send({ message: 'Deleted!', id: id });
+      return res.send({message: "Deleted!", id: id});
     }
 
 
-    return res.status(403).send({ error: "Access is denied!!" });
+    return res.status(403).send({error: "Access is denied!!"});
   } catch (e) {
     next();
   }

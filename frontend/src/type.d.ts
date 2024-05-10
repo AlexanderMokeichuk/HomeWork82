@@ -6,6 +6,7 @@ export interface AlbumApi {
   artist: string,
   createdAt: number,
   image: string | null,
+  isPublished: boolean,
 }
 
 export interface ArtistsApi {
@@ -13,6 +14,7 @@ export interface ArtistsApi {
   name: string,
   image: string | null,
   description: string | null,
+  isPublished: boolean,
 }
 
 export interface TrackApi {
@@ -21,6 +23,7 @@ export interface TrackApi {
   album: string,
   duration: string,
   item: number,
+  isPublished: boolean,
 }
 
 export interface TracksHistory {
@@ -63,6 +66,7 @@ export interface User {
   _id: string;
   username: string;
   token: string;
+  role: string,
 }
 
 export interface RegisterResponse {

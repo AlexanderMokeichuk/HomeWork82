@@ -23,13 +23,20 @@ const Artists: React.FC = () => {
       justifyContent={"center"}
       gap={2}>
       {lauding
-        ? <Spinner />
-        : artists.map((item) => {
-          return <ArtistCard key={item._id} artist={item} />;
-        })
+        ? <Spinner/>
+        : (
+          <>
+            {
+              artists.map((item) => {
+                return <ArtistCard key={item._id} artist={item}/>;
+              })
+            }
+          </>
+        )
       }
     </Grid>
-  );
+  )
+    ;
 };
 
 export default Artists;

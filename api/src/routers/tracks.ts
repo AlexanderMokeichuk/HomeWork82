@@ -54,9 +54,12 @@ tracksRouter.delete('/:id', auth, async (req, res, next) => {
   const user = (req as RequestWithUser).user!;
   try {
 
-    const album = await Track.find({_id: id});
+    const track = await Track.findOne({_id: id});
+    if (!track) {
+      return res.status(404).send({error: "Not found track!"});
+    }
 
-    if (user.role === "administrator") {
+    if (user.role === "admin") {
       await Track.findOneAndDelete({_id: id});
       return res.send({ message: 'Deleted!', id: id });
     }

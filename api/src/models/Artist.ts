@@ -9,7 +9,6 @@ const ArtistSchema = new Schema<ArtistFront>({
   },
   image: {
     type: String || null,
-    required: true,
   },
   description: String,
   isPublished: {

@@ -18,11 +18,11 @@ const AlbumSchema = new Schema<AlbumFront>({
   },
   image: {
     type: String || null,
-    required: true,
   },
   isPublished: {
     type: Boolean,
     required: true,
+    default: false,
   },
 },{
   versionKey: false,

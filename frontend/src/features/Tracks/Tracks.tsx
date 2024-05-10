@@ -3,7 +3,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {fetchAlbumById, fetchTracksFromAlbum} from "./tracksThinks";
 import {selectFullInfoAlbum, selectLaudingFullInfo, selectTracks} from "./tracksSlice";
-import {Box, Grid, Typography} from "@mui/material";
+import {Alert, AlertTitle, Box, Grid, Typography} from "@mui/material";
 import Spinner from "../../UI/components/Spinner/Spinner";
 import TrackCard from "./comonents/TrackCard/TrackCard";
 import {selectUser} from "../Users/usersSlice";
@@ -102,6 +102,18 @@ const Tracks: React.FC = () => {
                 </Grid>
 
                 <Grid item xs display={"flex"} flexDirection={"column"} gap={2}>
+                  {
+                    !tracks.length
+                      ? (
+                        <Alert severity="info" sx={{width: "100%", margin: "auto"}}>
+                          <AlertTitle>Info</AlertTitle>
+                          <Typography variant={"h6"}>
+                            There are no tracks on this album!!
+                          </Typography>
+                        </Alert>
+                      )
+                      : undefined
+                  }
                   {tracks.map((track) => {
                     return (
                       <TrackCard
