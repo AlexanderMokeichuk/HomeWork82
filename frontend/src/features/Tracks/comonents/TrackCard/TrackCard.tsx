@@ -1,7 +1,7 @@
 import React from "react";
 import {InfoAlbum, TrackApi} from "../../../../type";
 import {Alert, Box, Button, Grid, IconButton, useTheme} from "@mui/material";
-import {API_URL} from "../../../../constants";
+import {API_URL, PERMISSIONS_CHECK} from "../../../../constants";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
@@ -40,8 +40,10 @@ const TrackCard: React.FC<Props> = ({track, album}) => {
 
 
   const deleteAlbumApi = async () => {
-    await dispatch(deleteTrack(track._id));
-    await dispatch(fetchTracksFromAlbum(album._id));
+    if (confirm("Should I delete this track?")) {
+      await dispatch(deleteTrack(track._id));
+      await dispatch(fetchTracksFromAlbum(album._id));
+    }
   };
 
   const publish = async () => {
@@ -49,12 +51,16 @@ const TrackCard: React.FC<Props> = ({track, album}) => {
     await dispatch(fetchTracksFromAlbum(album._id));
   };
 
+  const permissionsCheck = PERMISSIONS_CHECK(user, track.isPublished);
+
   return (
     <Alert
-      style={user?.role === "user" || !user && !track.isPublished
-        ? {display: "none"}
-        : {display: "block"}
+      style={
+        permissionsCheck
+          ? {display: "block"}
+          : {display: "none"}
       }
+
       icon={false}
       sx={{
       background: "#2F4F4F",
@@ -119,7 +125,7 @@ const TrackCard: React.FC<Props> = ({track, album}) => {
                   <DeleteIcon/>
                 </IconButton>
                 <Button type={"button"} onClick={publish} sx={{color: "gray"}}>
-                  {track.isPublished
+                  {!track.isPublished
                     ? "Publish"
                     : "Deactivate"
                   }

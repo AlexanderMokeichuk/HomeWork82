@@ -7,7 +7,7 @@ import {Alert, AlertTitle, Box, Grid, Typography} from "@mui/material";
 import Spinner from "../../UI/components/Spinner/Spinner";
 import TrackCard from "./comonents/TrackCard/TrackCard";
 import {selectUser} from "../Users/usersSlice";
-import {API_URL} from "../../constants";
+import {API_URL, CHECKING_PUBLICATIONS} from "../../constants";
 
 const Tracks: React.FC = () => {
   const navigate = useNavigate();
@@ -28,6 +28,9 @@ const Tracks: React.FC = () => {
       navigate(-1);
     }
   }, [id, dispatch, user, navigate]);
+
+  const check = CHECKING_PUBLICATIONS(tracks);
+
 
   return (
     <>
@@ -112,17 +115,26 @@ const Tracks: React.FC = () => {
                           </Typography>
                         </Alert>
                       )
-                      : undefined
+                      : check || user?.role === "admin"
+                        ? tracks.map((track) => {
+                          return (
+                            <TrackCard
+                              key={track._id}
+                              track={track}
+                              album={infAlbum!}
+                            />
+                          );
+                        })
+                        : (
+                          <Alert severity="info" sx={{width: "100%", margin: "auto"}}>
+                            <AlertTitle>Info</AlertTitle>
+                            <Typography variant={"h6"}>
+                              There are no published tracks!!
+                            </Typography>
+                          </Alert>
+                        )
                   }
-                  {tracks.map((track) => {
-                    return (
-                      <TrackCard
-                        key={track._id}
-                        track={track}
-                        album={infAlbum!}
-                      />
-                    );
-                  })}
+
                 </Grid>
               </Grid>
             </Grid>

@@ -5,9 +5,14 @@ import {Box, Button, IconButton, SwipeableDrawer} from "@mui/material";
 import {useAppDispatch} from "../../../app/hooks";
 import {logout} from "../../../features/Users/usersThunks";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import {Link} from "react-router-dom";
+import {Link as NavLink, Link} from "react-router-dom";
+import {User} from "../../../type";
 
-const UserMenu: React.FC = () => {
+interface Props {
+  user: User;
+}
+
+const UserMenu: React.FC<Props> = ({user}) => {
   const dispatch = useAppDispatch();
   const [open, setOpen] = React.useState(false);
 
@@ -38,6 +43,17 @@ const UserMenu: React.FC = () => {
          role="presentation"
          onClick={toggleDrawer(false)}
     >
+      <List>
+        <div style={{
+          color: "white",
+          display: "flex",
+          gap: 3,
+        }}
+        >
+          <strong>Role:</strong>
+          <span>{user.role}</span>
+        </div>
+      </List>
       <List sx={{
         display: "flex",
         flexDirection: "column",
@@ -67,7 +83,22 @@ const UserMenu: React.FC = () => {
         </Link>
       </List>
       <Divider />
-      <List sx={{marginTop: "auto", padding: 2}}>
+      <List sx={{
+        display: "flex",
+        flexDirection: "column",
+        marginTop: "auto",
+        padding: 2
+      }}
+      >
+        <Button
+          component={NavLink}
+          to="/login"
+          color="inherit"
+          style={{color: "white"}}
+        >
+          Change account
+        </Button>
+
         <Button color="warning" onClick={handelLogout}>
           Logout
         </Button>
@@ -77,7 +108,10 @@ const UserMenu: React.FC = () => {
 
   return (
     <div>
-      <IconButton onClick={toggleDrawer(true)}><AccountCircleIcon/></IconButton>
+      <IconButton onClick={toggleDrawer(true)}>
+        <span style={{fontSize: 14}}>{user.username}</span>
+        <AccountCircleIcon/>
+      </IconButton>
       <SwipeableDrawer
         anchor={"right"}
         open={open}

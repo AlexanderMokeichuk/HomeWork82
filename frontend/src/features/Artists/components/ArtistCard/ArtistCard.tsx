@@ -3,7 +3,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import React from "react";
 import {Link} from "react-router-dom";
 import {ArtistsApi} from "../../../../type";
-import {API_URL} from "../../../../constants";
+import {API_URL, PERMISSIONS_CHECK} from "../../../../constants";
 import imageNotAvailable from "../../../../../public/noImage.png";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
@@ -26,8 +26,10 @@ const ArtistCard: React.FC<Props> = ({artist}) => {
   }
 
   const deleteAlbumApi = async () => {
-    await dispatch(deleteArtist(artist._id));
-    await dispatch(fetchArtists());
+    if (confirm("Should I delete this artist?")) {
+      await dispatch(deleteArtist(artist._id));
+      await dispatch(fetchArtists());
+    }
   };
 
   const publish = async () => {
@@ -35,15 +37,19 @@ const ArtistCard: React.FC<Props> = ({artist}) => {
     await dispatch(fetchArtists());
   };
 
+
+  const permissionsCheck = PERMISSIONS_CHECK(user, artist.isPublished);
+
   return (
     <Grid
       item
       xs
       md={4}
       lg={3}
-      style={user?.role === "user" || !user && !artist  .isPublished
-        ? {display: "none"}
-        : {display: "block"}
+      style={
+      permissionsCheck
+        ? {display: "block"}
+        : {display: "none"}
       }
     >
       <Card sx={{
@@ -79,7 +85,7 @@ const ArtistCard: React.FC<Props> = ({artist}) => {
                   <DeleteIcon/>
                 </IconButton>
                 <Button type={"button"} onClick={publish} sx={{color: "gray"}}>
-                  {artist.isPublished
+                  {!artist.isPublished
                     ? "Publish"
                     : "Deactivate"
                   }

@@ -9,7 +9,7 @@ const AppToolbar = () => {
 
   return (
     <Grid item>
-      {user ? <UserMenu/> : <AnonymousMenu/>}
+      {user ? <UserMenu user={user}/> : <AnonymousMenu/>}
     </Grid>
   );
 };

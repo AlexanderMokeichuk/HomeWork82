@@ -3,7 +3,7 @@ import React from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {AlbumApi} from "../../../../type";
 import {Link} from "react-router-dom";
-import {API_URL} from "../../../../constants";
+import {API_URL, PERMISSIONS_CHECK} from "../../../../constants";
 import imageNotAvailable from "../../../../../public/noImage.png";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 import {selectUser} from "../../../Users/usersSlice";
@@ -37,8 +37,10 @@ const AlbumCard: React.FC<Props> = ({album, artist}) => {
   }
 
   const deleteAlbumApi = async () => {
-    await dispatch(deleteAlbum(album._id));
-    await dispatch(fetchAlbumsByQuery(artist));
+    if (confirm("Should I delete this album?")) {
+      await dispatch(deleteAlbum(album._id));
+      await dispatch(fetchAlbumsByQuery(artist));
+    }
   };
 
   const publish = async () => {
@@ -46,11 +48,14 @@ const AlbumCard: React.FC<Props> = ({album, artist}) => {
     await dispatch(fetchAlbumsByQuery(artist));
   };
 
+  const permissionsCheck = PERMISSIONS_CHECK(user, album.isPublished);
+
   return (
     <Card
-      style={user?.role === "user" || !user && !album.isPublished
-        ? {display: "none"}
-        : {display: "block"}
+      style={
+        permissionsCheck
+          ? {display: "block"}
+          : {display: "none"}
       }
       sx={{
         height: 380,
@@ -97,7 +102,7 @@ const AlbumCard: React.FC<Props> = ({album, artist}) => {
               </IconButton>
 
               <Button type={"button"} onClick={publish} sx={{color: "gray"}}>
-                {album.isPublished
+                {!album.isPublished
                   ? "Publish"
                   : "Deactivate"
                 }
