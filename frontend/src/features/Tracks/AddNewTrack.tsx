@@ -1,8 +1,7 @@
 import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
-import {Button, Grid, SelectChangeEvent, TextField} from "@mui/material";
+import {Box, Button, Grid, SelectChangeEvent, TextField} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {useNavigate} from "react-router-dom";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -24,8 +23,8 @@ const defaultState: Track = {
 
 const AddNewTrack: React.FC = () => {
   const navigate = useNavigate();
-  const [artist, setArtist] = React.useState<string[]>([]);
-  const [album, setAlbum] = React.useState<string[]>([]);
+  const [artist, setArtist] = React.useState<string>("");
+  const [album, setAlbum] = React.useState<string>("");
   const [formState, setFormState] = useState<Track>(defaultState);
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
@@ -38,28 +37,19 @@ const AddNewTrack: React.FC = () => {
       navigate("/");
     } else {
       dispatch(fetchArtists());
-      if (artist.length) {
-        dispatch(fetchAlbumsByQuery(artist[0]));
+      if (artist !== "") {
+        dispatch(fetchAlbumsByQuery(artist));
       }
     }
   }, [dispatch, user, navigate, artist]);
 
-  const handleChangeArtist = (event: SelectChangeEvent<typeof artist>) => {
-    const {
-      target: {value},
-    } = event;
-    setArtist(
-      typeof value === "string" ? value.split(",") : value,
-    );
+  const handleChangeArtist = (event: SelectChangeEvent) => {
+    setArtist(event.target.value as string);
   };
 
-  const handleChangeAlbum = (event: SelectChangeEvent<typeof album>) => {
-    const {
-      target: {value},
-    } = event;
-    setAlbum(
-      typeof value === "string" ? value.split(",") : value,
-    );
+
+  const handleChangeAlbum = (event: SelectChangeEvent) => {
+    setAlbum(event.target.value as string);
   };
 
   const onChangeForm = (e: ChangeEvent<HTMLInputElement>) => {
@@ -81,12 +71,12 @@ const AddNewTrack: React.FC = () => {
     e.preventDefault();
     await dispatch(postTrack({
       name: formState.name,
-      album: album[0],
+      album: album,
       item: formState.item,
       duration: formState.duration,
     }));
-    setAlbum([""]);
-    setArtist([""]);
+    setAlbum("");
+    setArtist("");
     setFormState(defaultState);
   };
 
@@ -143,17 +133,15 @@ const AddNewTrack: React.FC = () => {
           />
 
 
-          <div>
-            <FormControl sx={{m: 1, width: "100%"}}>
-              <InputLabel id="demo-multiple-name-label">Artists</InputLabel>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Artists</InputLabel>
               <Select
-                labelId="demo-multiple-name-label"
-                id="demo-multiple-name"
-                multiple
-                required
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
                 value={artist}
+                label="Artists"
                 onChange={handleChangeArtist}
-                input={<OutlinedInput label="Artists"/>}
               >
                 {artists.map((artist) => (
                   <MenuItem
@@ -165,19 +153,17 @@ const AddNewTrack: React.FC = () => {
                 ))}
               </Select>
             </FormControl>
-          </div>
+          </Box>
 
-          <div>
-            <FormControl sx={{m: 1, width: "100%"}}>
-              <InputLabel id="demo-multiple-name-label">Albums</InputLabel>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Albums</InputLabel>
               <Select
-                labelId="demo-multiple-name-label"
-                id="demo-multiple-name"
-                multiple
-                required
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
                 value={album}
+                label="Albums"
                 onChange={handleChangeAlbum}
-                input={<OutlinedInput label="Albums"/>}
               >
                 {albums.map((album) => (
                   <MenuItem
@@ -189,7 +175,8 @@ const AddNewTrack: React.FC = () => {
                 ))}
               </Select>
             </FormControl>
-          </div>
+          </Box>
+
 
           <Button
             variant="contained"

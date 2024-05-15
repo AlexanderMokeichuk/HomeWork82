@@ -1,10 +1,9 @@
 import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
-import {Button, Grid, SelectChangeEvent, TextField} from "@mui/material";
+import {Box, Button, Grid, SelectChangeEvent, TextField} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {useNavigate} from "react-router-dom";
 import FileInput from "../../UI/components/FileInput/FileInput";
 import {Album} from "../../type";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -23,7 +22,7 @@ const defaultState: Album = {
 
 const AddNewAlbum: React.FC = () => {
   const navigate = useNavigate();
-  const [artist, setArtist] = React.useState<string[]>([]);
+  const [artist, setArtist] = React.useState<string>('');
   const [formState, setFormState] = useState<Album>(defaultState);
   const dispatch = useAppDispatch();
   const artists = useAppSelector(selectArtists);
@@ -38,13 +37,9 @@ const AddNewAlbum: React.FC = () => {
     }
   }, [dispatch, user, navigate]);
 
-  const handleChange = (event: SelectChangeEvent<typeof artist>) => {
-    const {
-      target: { value },
-    } = event;
-    setArtist(
-      typeof value === 'string' ? value.split(',') : value,
-    );
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setArtist(event.target.value as string);
   };
 
   const onChangeForm = (e: ChangeEvent<HTMLInputElement>) => {
@@ -69,11 +64,11 @@ const AddNewAlbum: React.FC = () => {
     e.preventDefault();
     await dispatch(postAlbum({
       name: formState.name,
-      artist: artist[0],
+      artist: artist,
       createdAt: formState.createdAt,
       image: formState.image,
     }));
-    setArtist([""]);
+    setArtist("");
     setFormState(defaultState);
   };
 
@@ -91,7 +86,7 @@ const AddNewAlbum: React.FC = () => {
           item
           sx={{
             width: 700,
-            display: 'flex',
+            display: "flex",
             flexDirection: "column",
             gap: 1,
           }}
@@ -123,16 +118,15 @@ const AddNewAlbum: React.FC = () => {
             onChange={onChangeFileInput}
           />
 
-          <div>
-            <FormControl sx={{m: 1, width: "100%"}}>
-              <InputLabel id="demo-multiple-name-label">Artists</InputLabel>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Artists</InputLabel>
               <Select
-                labelId="demo-multiple-name-label"
-                id="demo-multiple-name"
-                multiple
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
                 value={artist}
+                label="Artists"
                 onChange={handleChange}
-                input={<OutlinedInput label="Artists"/>}
               >
                 {artists.map((artist) => (
                   <MenuItem
@@ -144,7 +138,7 @@ const AddNewAlbum: React.FC = () => {
                 ))}
               </Select>
             </FormControl>
-          </div>
+          </Box>
 
           <Button
             variant="contained"
