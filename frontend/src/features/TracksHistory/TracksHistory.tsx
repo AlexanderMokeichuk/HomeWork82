@@ -4,9 +4,10 @@ import {selectUser} from "../Users/usersSlice";
 import {useNavigate} from "react-router-dom";
 import {fetchTrackHistory} from "./tracksHistoryThunks";
 import {selectHistory, selectTracksHistoryLauding} from "./tracksHistorySlice";
-import {Alert, AlertTitle, Grid, Typography} from "@mui/material";
+import {Grid} from "@mui/material";
 import TrackHistoryCard from "./components/TrackHistoryCard/TrackHistoryCard";
 import Spinner from "../../UI/components/Spinner/Spinner";
+import OwnAlert from "../../UI/components/OwnAlert/OwnAlert";
 
 const TracksHistory: React.FC = () => {
   const navigate = useNavigate();
@@ -37,12 +38,9 @@ const TracksHistory: React.FC = () => {
             {
               !tracks.length
                 ? (
-                  <Alert severity="info" sx={{width: "100%", margin: "auto"}}>
-                    <AlertTitle>Info</AlertTitle>
-                    <Typography variant={"h6"}>
-                      History is empty!!
-                    </Typography>
-                  </Alert>
+                  <OwnAlert>
+                    History is empty!!
+                  </OwnAlert>
                 )
                 : undefined
             }

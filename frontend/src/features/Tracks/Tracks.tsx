@@ -3,11 +3,12 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {fetchAlbumById, fetchTracksFromAlbum} from "./tracksThinks";
 import {selectFullInfoAlbum, selectLaudingFullInfo, selectTracks} from "./tracksSlice";
-import {Alert, AlertTitle, Box, Grid, Typography} from "@mui/material";
+import {Box, Grid, Typography} from "@mui/material";
 import Spinner from "../../UI/components/Spinner/Spinner";
 import TrackCard from "./comonents/TrackCard/TrackCard";
 import {selectUser} from "../Users/usersSlice";
 import {API_URL, CHECKING_PUBLICATIONS} from "../../constants";
+import OwnAlert from "../../UI/components/OwnAlert/OwnAlert";
 
 const Tracks: React.FC = () => {
   const navigate = useNavigate();
@@ -108,12 +109,9 @@ const Tracks: React.FC = () => {
                   {
                     !tracks.length
                       ? (
-                        <Alert severity="info" sx={{width: "100%", margin: "auto"}}>
-                          <AlertTitle>Info</AlertTitle>
-                          <Typography variant={"h6"}>
-                            There are no tracks on this album!!
-                          </Typography>
-                        </Alert>
+                        <OwnAlert>
+                          There are no tracks on this album!!
+                        </OwnAlert>
                       )
                       : check || user?.role === "admin"
                         ? tracks.map((track) => {
@@ -126,15 +124,11 @@ const Tracks: React.FC = () => {
                           );
                         })
                         : (
-                          <Alert severity="info" sx={{width: "100%", margin: "auto"}}>
-                            <AlertTitle>Info</AlertTitle>
-                            <Typography variant={"h6"}>
-                              There are no published tracks!!
-                            </Typography>
-                          </Alert>
+                          <OwnAlert>
+                            There are no published tracks!!
+                          </OwnAlert>
                         )
                   }
-
                 </Grid>
               </Grid>
             </Grid>

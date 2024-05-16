@@ -8,8 +8,9 @@ import permit from "../middleware/permit";
 
 const artistsRouter = express.Router();
 
-artistsRouter.post("/", auth, imagesUpload.single("image"), async (req, res, next) => {
+artistsRouter.post("/", auth, imagesUpload.single("image"),  async (req, res, next) => {
   try {
+
     const postArtist = {
       name: req.body.name,
       image: req.file ? req.file.filename : null,

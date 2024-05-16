@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {RegisterMutation} from "../../type";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {Link as RouterLink, useNavigate} from "react-router-dom";
 import {registration} from "./usersThunks";
-import {selectRegisterError} from "./usersSlice";
+import {selectRegisterError, unsetError} from "./usersSlice";
 
 const Register: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -16,6 +16,10 @@ const Register: React.FC = () => {
     username: "",
     password: "",
   });
+
+  useEffect(() => {
+    dispatch(unsetError());
+  }, [dispatch]);
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;

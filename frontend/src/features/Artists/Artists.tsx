@@ -2,11 +2,12 @@ import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {selectArtists, selectLaudingArtists} from "./artistsSlice";
 import {fetchArtists} from "./artistsThunks";
-import {Alert, AlertTitle, Grid, Typography} from "@mui/material";
+import {Grid} from "@mui/material";
 import ArtistCard from "./components/ArtistCard/ArtistCard";
 import Spinner from "../../UI/components/Spinner/Spinner";
 import {CHECKING_PUBLICATIONS} from "../../constants";
 import {selectUser} from "../Users/usersSlice";
+import OwnAlert from "../../UI/components/OwnAlert/OwnAlert";
 
 const Artists: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -36,12 +37,9 @@ const Artists: React.FC = () => {
                 return <ArtistCard key={item._id} artist={item}/>;
               })
               : (
-                <Alert severity="info" sx={{width: "100%", margin: "auto"}}>
-                  <AlertTitle>Info</AlertTitle>
-                  <Typography variant={"h6"}>
-                    There is no published artist!!
-                  </Typography>
-                </Alert>
+                <OwnAlert>
+                  There is no published artist!!
+                </OwnAlert>
               )
             }
           </>

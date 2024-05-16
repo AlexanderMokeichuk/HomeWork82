@@ -1,21 +1,24 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Link as RouterLink, useNavigate} from "react-router-dom";
 import {LoginMutation} from "../../type";
 import {Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from "@mui/material";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {selectLoginError} from "./usersSlice";
+import {selectLoginError, unsetError} from "./usersSlice";
 import {login} from "./usersThunks";
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const error = useAppSelector(selectLoginError);
   const navigate = useNavigate();
-
   const [state, setState] = useState<LoginMutation>({
     username: "",
     password: "",
   });
+
+  useEffect(() => {
+    dispatch(unsetError());
+  }, [dispatch]);
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;

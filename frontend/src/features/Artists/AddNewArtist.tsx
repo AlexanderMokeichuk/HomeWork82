@@ -87,7 +87,6 @@ const AddNewArtist: React.FC = () => {
           <TextField
             id="outlined-multiline-flexible"
             name={"description"}
-            required
             multiline
             fullWidth={true}
             minRows={2}

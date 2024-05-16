@@ -26,6 +26,10 @@ export const usersSlice = createSlice({
     unsetUser: (state) => {
       state.user = null;
     },
+    unsetError: (state) => {
+      state.registerError = null;
+      state.loginError = null;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(registration.pending, (state) => {
@@ -54,7 +58,7 @@ export const usersSlice = createSlice({
   }
 });
 
-export const { unsetUser } = usersSlice.actions;
+export const { unsetUser , unsetError} = usersSlice.actions;
 
 export const usersReducer = usersSlice.reducer;
 
