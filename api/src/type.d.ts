@@ -25,10 +25,13 @@ export interface TrackFront {
 }
 
 export interface User {
-  username: string,
+  email: string,
   password: string,
   token: string,
   role: string,
+  avatar: string | null,
+  displayName: string,
+  googleID: string | null;
 }
 
 export interface UserApi extends User {

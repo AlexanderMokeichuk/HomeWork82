@@ -10,15 +10,15 @@ const UserSchema = new Schema<User, UserModel, UserMethods>({
     type: String,
     required: true,
   },
-  username: {
+  email: {
     type: String,
     required: true,
     unique: true,
     validate: {
-      validator: async function (this: HydratedDocument<User>, username: string): Promise<boolean> {
-        if (!this.isModified('username')) return true;
+      validator: async function (this: HydratedDocument<User>, email: string): Promise<boolean> {
+        if (!this.isModified('email')) return true;
 
-        const user: HydratedDocument<User> | null = await User.findOne({username});
+        const user: HydratedDocument<User> | null = await User.findOne({email});
         const userBoolean = Boolean(user);
         return !userBoolean;
       },
@@ -34,7 +34,13 @@ const UserSchema = new Schema<User, UserModel, UserMethods>({
     required: true,
     enum: ["admin", "user"],
     default: "user",
-  }
+  },
+  displayName: {
+    type: String,
+    required: true,
+  },
+  googleID: String || null,
+  avatar: String || null,
 }, {
   versionKey: false,
 });

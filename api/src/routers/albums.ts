@@ -1,5 +1,5 @@
 import express from "express";
-import {imagesUpload} from "../multer";
+import {clearImages, imagesUpload} from "../multer";
 import {AlbumApi, AlbumArtistData} from "../type";
 import Album from "../models/Album";
 import mongoose from "mongoose";
@@ -13,34 +13,37 @@ albumsRouter.post(
   auth,
   imagesUpload.single("image"),
   async (req, res, next) => {
-  try {
-    const postAlbum = {
-      name: req.body.name,
-      artist: req.body.artist,
-      createdAt: parseInt(req.body.createdAt),
-      image: req.file ? req.file.filename : null,
-    };
+    try {
+      const postAlbum = {
+        name: req.body.name,
+        artist: req.body.artist,
+        createdAt: parseInt(req.body.createdAt),
+        image: req.file ? req.file.filename : null,
+      };
 
-    const album = new Album(postAlbum);
-    await album.save();
+      const album = new Album(postAlbum);
+      await album.save();
 
-    return res.send(album);
-  } catch (e) {
-    if (e instanceof mongoose.Error.ValidationError) {
-      return res.status(422).send(e);
+      return res.send(album);
+    } catch (e) {
+      if (req.file) {
+        clearImages(req.file.filename);
+      }
+      if (e instanceof mongoose.Error.ValidationError) {
+        return res.status(422).send(e);
+      }
+      next(e);
     }
-    next(e);
-  }
-});
+  });
 
 albumsRouter.get("/", async (req, res, next) => {
   const query = req.query.artist as string;
   try {
     if (query) {
       if (!mongoose.Types.ObjectId.isValid(query)) {
-        return res.status(422).send({ error: 'Not found artist!!' });
+        return res.status(422).send({error: "Not found artist!!"});
       }
-      const albumsById = await Album.find({artist: query}).sort({createdAt: - 1});
+      const albumsById = await Album.find({artist: query}).sort({createdAt: -1});
       return res.send(albumsById);
     }
 
@@ -51,21 +54,21 @@ albumsRouter.get("/", async (req, res, next) => {
   }
 });
 
-albumsRouter.get('/:id', async (req, res, next) => {
+albumsRouter.get("/:id", async (req, res, next) => {
   const id = req.params.id as string;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(422).send({ error: 'Artist not found!' });
+    return res.status(422).send({error: "Artist not found!"});
   }
 
   try {
     const albumById = await Album.findOne<AlbumArtistData>({_id: id}).populate(
-      'artist',
-      'name description image'
+      "artist",
+      "name description image"
     );
 
     if (!albumById) {
-      return res.status(422).send({ error: 'Artist not found!' });
+      return res.status(422).send({error: "Artist not found!"});
     }
 
     return res.send(albumById);
@@ -91,7 +94,7 @@ albumsRouter.patch("/:id/togglePublished", auth, permit(["admin"]), async (req, 
   }
 });
 
-albumsRouter.delete('/:id', auth, permit(["admin"]), async (req, res, next) => {
+albumsRouter.delete("/:id", auth, permit(["admin"]), async (req, res, next) => {
   const id = req.params.id;
   try {
 
@@ -101,7 +104,7 @@ albumsRouter.delete('/:id', auth, permit(["admin"]), async (req, res, next) => {
     }
 
     await Album.findOneAndDelete({_id: id});
-    return res.send({ message: 'Deleted!', id: id });
+    return res.send({message: "Deleted!", id: id});
   } catch (e) {
     next();
   }

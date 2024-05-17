@@ -25,16 +25,20 @@ const run = async () => {
 
   await User.create(
     {
-      username: 'Alex',
+      email: 'Alex',
       password: '1234',
       token: crypto.randomUUID(),
-      role: "admin"
+      role: "admin",
+      googleID: null,
+      displayName: "Sasha",
     },
     {
-      username: 'Evgeny',
+      email: 'Evgeny',
       password: '1234',
       token: crypto.randomUUID(),
       role: "user",
+      googleID: null,
+      displayName: "John",
     },
   );
 

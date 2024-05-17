@@ -1,6 +1,6 @@
 import express from "express";
 import Artist from "../models/Artist";
-import {imagesUpload} from "../multer";
+import {clearImages, imagesUpload} from "../multer";
 import {ArtistApi, ArtistFront} from "../type";
 import mongoose from "mongoose";
 import auth from "../middleware/auth";
@@ -22,6 +22,10 @@ artistsRouter.post("/", auth, imagesUpload.single("image"),  async (req, res, ne
 
     return res.send(artist);
   } catch (e) {
+    if (req.file) {
+      clearImages(req.file.filename);
+    }
+
     if (e instanceof mongoose.Error.ValidationError) {
       return res.status(422).send(e);
     }
