@@ -4,7 +4,7 @@ interface  Props {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void,
   name: string,
 }
-const FileInput: React.FC<Props> = ({name, onChange}) => {
+const   FileInput: React.FC<Props> = ({name, onChange}) => {
   const inputRef = useRef(null);
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

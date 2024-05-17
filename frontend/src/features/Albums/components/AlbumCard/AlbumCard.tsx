@@ -102,7 +102,7 @@ const AlbumCard: React.FC<Props> = ({album, artist}) => {
               </IconButton>
 
               <Button type={"button"} onClick={publish} sx={{color: "gray"}}>
-                {!album.isPublished
+                {! album.isPublished
                   ? "Publish"
                   : "Deactivate"
                 }

@@ -56,7 +56,7 @@ export interface TracksHistoryApi {
   datetime: string,
   track: {
     _id: string,
-    name: 'Не сначала'
+    name: string
   },
   artist: {
     _id: string,
@@ -72,19 +72,24 @@ export interface InfoAlbum extends AlbumApi<OutletProps, "createdAt", "artist">{
 }
 
 export interface RegisterMutation {
-  username: string;
+  email: string;
   password: string;
+  avatar: File | null;
+  displayName: string;
 }
 
 export interface LoginMutation {
-  username: string;
+  email: string;
   password: string;
 }
 export interface User {
   _id: string;
-  username: string;
+  email: string;
   token: string;
   role: string,
+  avatar: string | null,
+  displayName: string,
+  googleID: string | null;
 }
 
 export interface RegisterResponse {

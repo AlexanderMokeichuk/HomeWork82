@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {RegisterMutation} from "../../type";
@@ -6,16 +6,24 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {Link as RouterLink, useNavigate} from "react-router-dom";
 import {registration} from "./usersThunks";
 import {selectRegisterError, unsetError} from "./usersSlice";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import FileInput from "../../UI/components/FileInput/FileInput";
+import InputLabel from "@mui/material/InputLabel";
+
+
+const initialState: RegisterMutation = {
+  email: "",
+  password: "",
+  avatar: null,
+  displayName: "",
+};
 
 const Register: React.FC = () => {
   const dispatch = useAppDispatch();
   const error = useAppSelector(selectRegisterError);
   const navigate = useNavigate();
 
-  const [state, setState] = useState<RegisterMutation>({
-    username: "",
-    password: "",
-  });
+  const [state, setState] = useState<RegisterMutation>(initialState);
 
   useEffect(() => {
     dispatch(unsetError());
@@ -26,6 +34,16 @@ const Register: React.FC = () => {
     setState(prevState => {
       return {...prevState, [name]: value};
     });
+  };
+
+  const onChangeFileInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const {name, files} = e.target;
+    if (files) {
+      setState(prevState => ({
+        ...prevState,
+        [name]: files[0],
+      }));
+    }
   };
 
   const submitFormHandler = async (event: React.FormEvent) => {
@@ -69,13 +87,15 @@ const Register: React.FC = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                label="Username"
-                name="username"
-                autoComplete="new-username"
-                value={state.username}
+                label="E-mail"
+                name="email"
+                type={"email"}
+                required
+                autoComplete="new-email"
+                value={state.email}
                 onChange={inputChangeHandler}
-                error={Boolean(getFieldError("username"))}
-                helperText={getFieldError("username")}
+                error={Boolean(getFieldError("email"))}
+                helperText={getFieldError("email")}
               />
             </Grid>
             <Grid item xs={12}>
@@ -83,6 +103,7 @@ const Register: React.FC = () => {
                 name="password"
                 label="Password"
                 type="password"
+                required
                 autoComplete="new-password"
                 value={state.password}
                 onChange={inputChangeHandler}
@@ -90,6 +111,44 @@ const Register: React.FC = () => {
                 helperText={getFieldError("password")}
               />
             </Grid>
+
+
+            <Grid item xs={12}>
+              <TextField
+                name="displayName"
+                label="Name"
+                required
+                autoComplete="new-displayName"
+                value={state.displayName}
+                onChange={inputChangeHandler}
+                error={Boolean(getFieldError("displayName"))}
+                helperText={getFieldError("displayName")}
+              />
+            </Grid>
+
+            <Grid
+              item xs={12}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2
+              }}
+            >
+              <InputLabel htmlFor="avatar_image">Avatar</InputLabel>
+              <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<CloudUploadIcon/>}
+              >
+                <FileInput
+                  name={"image"}
+                  onChange={onChangeFileInput}
+                />
+              </Button>
+            </Grid>
+
           </Grid>
           <Button
             type="submit"

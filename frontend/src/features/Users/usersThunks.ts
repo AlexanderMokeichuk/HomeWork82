@@ -5,11 +5,18 @@ import {GlobalError, LoginMutation, RegisterMutation, RegisterResponse, User, Va
 import {RootState} from "../../app/store";
 import {unsetUser} from "./usersSlice";
 
-export const registration = createAsyncThunk<User, RegisterMutation, {rejectValue: ValidationError}>(
-  'users/registration',
+export const registration = createAsyncThunk<User, RegisterMutation, { rejectValue: ValidationError }>(
+  "users/registration",
   async (registerMutation, {rejectWithValue}) => {
     try {
-      const {data: response} = await axiosApi.post<RegisterResponse>('/users', registerMutation);
+      const formData = new FormData();
+
+      const keys = Object.keys(registerMutation) as (keyof RegisterMutation)[];
+      keys.forEach(key => {
+        const value = registerMutation[key];
+        if (value !== null) formData.append(key, value);
+      });
+      const {data: response} = await axiosApi.post<RegisterResponse>("/users", formData);
 
       return response.user;
     } catch (error) {
@@ -22,7 +29,7 @@ export const registration = createAsyncThunk<User, RegisterMutation, {rejectValu
   }
 );
 
-export const login = createAsyncThunk<User, LoginMutation, {rejectValue: GlobalError}>(
+export const login = createAsyncThunk<User, LoginMutation, { rejectValue: GlobalError }>(
   "users/login",
   async (loginMutation, {rejectWithValue}) => {
     try {
@@ -38,10 +45,25 @@ export const login = createAsyncThunk<User, LoginMutation, {rejectValue: GlobalE
   },
 );
 
+export const googleLogin = createAsyncThunk<User, string, { rejectValue: GlobalError }>(
+  "users/googleLogin",
+  async (credential, {rejectWithValue}) => {
+    try {
+      const {data} = await axiosApi.post<RegisterResponse>("/users/google", {credential});
+      return data.user;
+    } catch (e) {
+      if (isAxiosError(e) && e.response && e.response.status === 404) {
+        return rejectWithValue(e.response.data);
+      }
+      throw e;
+    }
+  }
+);
+
 export const logout = createAsyncThunk<void, undefined, { state: RootState }>(
-  'users/logout',
-  async (_, { dispatch }) => {
-    await axiosApi.delete('/users/sessions',);
+  "users/logout",
+  async (_, {dispatch}) => {
+    await axiosApi.delete("/users/sessions",);
     dispatch(unsetUser());
   },
 );
